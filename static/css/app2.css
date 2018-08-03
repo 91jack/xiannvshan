@@ -1,0 +1,69 @@
+body{
+	background: #f0f0f0;
+}
+
+.intro {
+	background: #fff;
+	margin-bottom: 8px;
+}
+
+.content {
+	padding: 1rem;
+	font-size: 1.083333rem;
+	line-height: 1.875rem;
+	color: #666;
+}
+.intro-footer {
+	height: 3.333333rem;
+	line-height: 3.333333rem;
+	padding: 0 1rem;
+}
+.intro-footer img {
+	margin-top: 1rem;
+}
+.addr {
+	float: left;
+}
+.addr img {
+	width: 0.916666rem;
+	height: 1.333333rem;
+}
+.addr span {
+	margin-left: .5rem;
+	font-size: 1.083333rem;
+	color: #333;
+	font-weight: bold;
+}
+.tel {
+	display: block;
+	float: right;
+}
+.tel img {
+	display: inline-block;
+	width: 1.25rem;
+	height: 1.25rem;
+}
+
+.footer-btn {
+	height: 4.166666rem;
+	line-height: 4.166666rem;
+	font-size: 1.4rem;
+	margin-top: 0.833333rem;
+	text-align: center;
+	color: #fff;
+}
+.footer-btn a {
+	display: block;
+	color: #fff;
+}
+.bg-red {
+	background: #F75652;
+}
+.bg-green {
+	background: #22C41E;
+}
+.footer-btn a .icon {
+	width: 1.166666rem;
+	height: 1.166666rem;
+	vertical-align: middle;
+}

@@ -1,0 +1,114 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>统战馆</title>
+  <link rel="stylesheet" href="static/css/common.css">
+  <link rel="stylesheet" href="static/css/app2.css">
+</head>
+
+<body>
+	<div class="top-slider">
+		<ul class="top-slider-imgbox">
+			<li>
+				<a href="javascript:;">
+					<img src="static/img/banner1.png" alt="" />
+				</a>
+			</li>
+			<li>
+					<a href="javascript:;">
+					<img src="static/img/banner2.png" alt="" />
+				</a>
+			</li>
+			<li>
+					<a href="javascript:;">
+					<img src="static/img/banner3.png" alt="" />
+				</a>
+			</li>
+		</ul>
+		
+		<div class="top-slider-num">
+			<span><em class="current-num"></em>/<em class="all-num"></em></span>
+		</div>
+	</div>
+	
+	
+	<div class="goon">
+		<a href="javascript:;">
+			<img src="static/images/icon_go.png"/>
+		</a>
+	</div>
+	<h2 class="top-title">简介</h2>
+	
+	
+	<div class="intro">
+		<div class="content">
+			教育性：展陈中共中央总书记、国家主席习近平关于新时代中
+			国特色社会主义统战工作的新思想；八大民主党派发展历史沿
+			革，各党派历届领导人情况八大民主党派发展历史沿革，各党
+			派历届领导人情况
+		</div>
+		<div class="intro-footer">
+			<div class="addr">
+				<img src="static/images/icon_addr.png" alt="" />
+				<span>重庆市武隆区赵家乡115号</span>
+			</div>
+			<a href="tel:" class="tel">
+				<img src="static/images/icon_tel.png" alt="" />
+			</a>
+		</div>
+	</div>
+	
+	
+	<!--活动-->
+	<div class="activity">
+		<h2>活动(<span class="activity-num">2</span>)</h2>
+		<ul class="activity-list">
+			<li class="activity-item">
+				<a href="">
+					<div class="activity-item-img">
+						<img src="static/images/top_hero_cw_im17.jpg" alt="" />
+					</div>
+					<div class="activity-item-title">
+						<h3>注意!五一节会员活动来了感谢新老用户IphoneX大放送!</h3>
+						<p>发布：<span class="post-time">3</span>天前</p>
+					</div>
+				</a>
+			</li>
+			<li class="activity-item">
+				<a href="">
+					<div class="activity-item-img">
+						<img src="static/images/top_hero_cw_im17.jpg" alt="" />
+					</div>
+					<div class="activity-item-title">
+						<h3>注意!五一节会员活动来了感谢新老用户IphoneX大放送!</h3>
+						<p>发布：<span class="post-time">3</span>天前</p>
+					</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+	
+
+	
+<script src="static/js/jquery-3.1.1.min.js"></script>
+<script src="static/js/common.js"></script>
+<script src="static/js/slider.js"></script>
+<script type="text/javascript">
+	// 轮播调用
+	$('.top-slider-imgbox').each(function(){
+		var imgbox = $(this)[0];
+		var li = $(this).children('li');
+		var currentNum = $('.current-num');
+		var allNum = $('.all-num');
+		slider( imgbox, li,currentNum,allNum)
+	})
+	
+	
+
+
+</script>
+</body>
+</html>
