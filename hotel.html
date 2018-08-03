@@ -4,11 +4,12 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>赵家乡水坝</title>
+  <title>仙女山酒店</title>
   <link rel="stylesheet" href="static/css/common.css">
   <link rel="stylesheet" href="static/css/app2.css">
 </head>
-<body class="yiliao-page">
+
+<body>
 	<div class="top-slider">
 		<ul class="top-slider-imgbox">
 			<li>
@@ -41,24 +42,45 @@
 	</div>
 	<h2 class="top-title">简介</h2>
 	
-	<div class="yiliao-intro">
-		<div class="yiliao-content">
-			2005年8月1至8月2日，重庆武隆山虎关水库整治工程顺利通
-过市水利局、市发改委等部门的竣工验收，通过整治后恢复了
-蓄水能力450万方，新增供水能力90万方，恢复和改善灌溉面
-积0.7万亩，年发挥经济效益300万元
+	
+	<div class="intro">
+		<div class="content">
+			教育性：展陈中共中央总书记、国家主席习近平关于新时代中
+			国特色社会主义统战工作的新思想；八大民主党派发展历史沿
+			革，各党派历届领导人情况八大民主党派发展历史沿革，各党
+			派历届领导人情况
 		</div>
-		<div class="yiliao-into-footer">
-			<div class="yiliao-addr">
+		<div class="intro-footer">
+			<div class="addr">
 				<img src="static/images/icon_addr.png" alt="" />
 				<span>重庆市武隆区赵家乡115号</span>
 			</div>
-			<a href="tel:" class="yiliao-tel">
+			<a href="tel:" class="tel">
 				<img src="static/images/icon_tel.png" alt="" />
 			</a>
 		</div>
 	</div>
 	
+		<div class="scenic-item-info">
+			
+			<div class="scenic-item-intro">
+				<span class="scenic-item-status">实时情况</span>
+				<span class="fr isyiniao">已对接医疗服务</span>
+			</div>
+		
+			<div class="scenic-item-content">
+				<div class="scenic-item-cell">
+					<span>客房数：<em>25人</em></span>
+					<span>床位数：<em>25人</em></span>
+					<span>餐位数：<em>245人</em></span>
+				</div>
+				<div class="scenic-item-cell">
+					<span>人均：￥ <em>100 </em> 元/人/天</span>
+					<span>月租：￥<em>1800</em> 元/人/月</span>
+				</div>
+			</div>
+		</div>
+			
 	
 	<!--活动-->
 	<div class="activity">
@@ -91,8 +113,8 @@
 	
 	<div class="footer-btn bg-green">
 		<a href="javascript:;">
-			<img src="static/images/icon_piao.png" class="icon"/>
-			在线订票
+			<img src="static/images/icon_hotel.png" class="icon"/>
+			在线订房
 		</a>
 	</div>
 	
@@ -110,50 +132,6 @@
 	})
 	
 	
-
-
-// 日期换算
-var allWeek= ["日","一","二","三","四","五","六","日"];
-function week(w){
-	return allWeek[w];
-}
-
-// 获取本地时间
-var nowdate = new Date();
-var y = nowdate.getFullYear();
-var m = nowdate.getMonth();
-var d = nowdate.getDate();
-var w = nowdate.getDay();
-
-for(var n=0;n<7;n++){	
-	var ndate = new Date(y,m,d).getTime()+n*24000*3600;
-	
-	var futuredate = new Date()
-	futuredate.setTime(ndate)
-
-	var y1 = futuredate.getFullYear();
-	var m1 = futuredate.getMonth()+1;
-	var d1 = futuredate.getDate();
-	var w1 = week(futuredate.getDay());
-	
-	var time = y1 + '-' + m1 + '-' + d1;
-	$('.yuyue-day').eq(n).attr('data-date',time)
-	$('.yuyue-week span').eq(n).text(w1);
-	$('.yuyue-day-cell em').eq(n).text(d1);
-}
-
-
-
-
-// 点击时间
-$('.yuyue-day').each(function(){
-	$(this).on('click',function(){
-		var selectTime = $(this).attr('data-date'); // 将时间传到后台，返回当天医生列表
-		console.log(selectTime)
-		
-		$(this).addClass('today').siblings().removeClass('today')
-	})
-})
 
 
 </script>
