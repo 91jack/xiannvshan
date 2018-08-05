@@ -13,65 +13,67 @@
   		position: relative;
   		background: #fff;
   	}
-  	.select-wrap {
-  		height: 3.333333rem;
-  		padding: 0 0.833333rem;
-  		width: 100%;
-  		overflow: hidden;
-  	}
-  	
-  	.select-wrap-inner {
-  		width: 200%;
-  	}
-  	.select-item {
-  		font-size: 1.25rem;
-  		line-height:3.333333rem;
-  		color:#999;
-  		float: left;
-  		text-align: center;
-      background: #fff;
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-pack: center;
-      -ms-flex-pack: center;
-      -webkit-justify-content: center;
-      justify-content: center;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      -webkit-align-items: center;
-      align-items: center;
-      margin-right: 1rem;
-  	}
-
-		.bar {
-	width:50px;
-	height:3px;
+#nav {
+	height: 3.333333rem;
+	padding: 0 0.833333rem;
+}
+.swiper-slide {
+	margin-right: .5rem;
+}
+.swiper-slide span{
+	font-size: 1.25rem;
+	line-height:3.333333rem;
+	color:#999;
+}
+#nav .bar {
+	width:2.083333rem;
+	height:0.125rem;
 	position:absolute;
 	bottom:0px;
 }
-.bar .color {
-	width:36px;
+#nav .bar .color {
+	width:1.5rem;
 	margin:0 auto;
-	height:3px;
-	background:#ff4891;
+	height:0.125rem;
+	background:#0BBE06;
 }
   	
-  	.search-result {
-  		width: 29.5rem;
-  		position: absolute;
-  		bottom: 1rem;
-  		margin: 0 auto;
-  	}
-  	.search-result li {
-  		width: 29.5rem;
-  		height:7.333333rem;
-  		background: #fff;
-  		border-radius: 0.416666rem;
-  		border:1px solid #e5e5e5;
-  		margin-bottom: 1rem;
-  	}
+.search-result {
+	width:100%;
+	position: absolute;
+	bottom: 1rem;
+	
+}
+.search-result ul {
+	width: 29.5rem;
+	margin: 0 auto;
+}
+.search-result li {
+	width: 27.5rem;
+	height:5.333333rem;
+	background: #fff;
+	border-radius: 0.416666rem;
+	border:1px solid #e5e5e5;
+	margin-bottom: 1rem;
+	padding: 1rem;
+}
+.search-result li .left {
+	float:left;
+	
+}
+.search-result li .left h3 {
+	font-size: 1.25rem;
+	color: #333;
+	line-height: 1.5rem;
+}
+.search-result li .left p {
+	font-size: 1rem;
+	line-height: 1.5rem;
+	color: #999;
+}
+.search-result li .left p:last-child {
+	color:#22C41E;
+}
   </style>
 </head>
 <body class="">
@@ -90,7 +92,7 @@
    <div class="swiper-container" id="nav">
     <div class="swiper-wrapper">
       <div class="swiper-slide" data-selectval='0'>
-        <span style="color:rgba(255,72,145,1);">全部</span>
+        <span style="color:#0BBE06;">全部展示</span>
       </div>
       <div class="swiper-slide" data-selectval='1'>
         <span>必看景点</span>
@@ -111,9 +113,9 @@
         <span>统战馆</span>
       </div>
       
-      <div class="bar">
+      <!--<div class="bar">
         <div class="color"></div>
-      </div>
+      </div>-->
     </div>
   </div>
         
@@ -156,15 +158,15 @@
 	var clientHeight = window.screen.height;
 	$('#map').css('height',clientHeight-168 + 'px');
 	
-	  //暂时设计每个slide大小需要一致
+	//暂时设计每个slide大小需要一致
   barwidth = 36 //导航粉色条的长度px
   tSpeed = 300 //切换速度300ms
   var navSwiper = new Swiper('#nav', {
-  	slidesPerView: 6,
+  	slidesPerView: 4,
   	freeMode: true,
   	on: {
   		init: function() {
-  			navSlideWidth = this.slides.eq(0).css('width'); //导航字数需要统一,每个导航宽度一致
+  			navSlideWidth = this.slides.eq(2).css('width'); //导航字数需要统一,每个导航宽度一致
   			bar = this.$el.find('.bar')
   			bar.css('width', navSlideWidth)
   			bar.transition(tSpeed)
@@ -179,85 +181,28 @@
   			topBar = this.$el.parents('body').find('#top') //页头
 
   		},
-
   	},
   });
 
-//var pageSwiper = new Swiper('#page', {
-//	watchSlidesProgress: true,
-//	resistanceRatio: 0,
-//	on: {
-//		touchMove: function() {
-//			progress = this.progress
-//			bar.transition(0)
-//			bar.transform('translateX(' + navSum * progress + 'px)')
-//			//粉色255,72,145灰色51,51,51
-//			for (i = 0; i < this.slides.length; i++) {
-//				slideProgress = this.slides[i].progress
-//				if (Math.abs(slideProgress) < 1) {
-//					r = Math.floor((255 - 51) * (1 - Math.pow(Math.abs(slideProgress), 2)) + 51)
-//					g = Math.floor((72 - 51) * (1 - Math.pow(Math.abs(slideProgress), 2)) + 51)
-//					b = Math.floor((145 - 51) * (1 - Math.pow(Math.abs(slideProgress), 2)) + 51)
-//					navSwiper.slides.eq(i).find('span').css('color', 'rgba(' + r + ',' + g + ',' + b + ',1)')
-//				}
-//			}
-//		},
-//		transitionStart: function() {
-//			activeIndex = this.activeIndex
-//			activeSlidePosition = navSwiper.slides[activeIndex].offsetLeft
-//			//释放时导航粉色条移动过渡
-//			bar.transition(tSpeed)
-//			bar.transform('translateX(' + activeSlidePosition + 'px)')
-//			//释放时文字变色过渡
-//			navSwiper.slides.eq(activeIndex).find('span').transition(tSpeed)
-//			navSwiper.slides.eq(activeIndex).find('span').css('color', 'rgba(255,72,145,1)')
-//			if (activeIndex > 0) {
-//				navSwiper.slides.eq(activeIndex - 1).find('span').transition(tSpeed)
-//				navSwiper.slides.eq(activeIndex - 1).find('span').css('color', 'rgba(51,51,51,1)')
-//			}
-//			if (activeIndex < this.slides.length) {
-//				navSwiper.slides.eq(activeIndex + 1).find('span').transition(tSpeed)
-//				navSwiper.slides.eq(activeIndex + 1).find('span').css('color', 'rgba(51,51,51,1)')
-//			}
-//			//导航居中
-//			navActiveSlideLeft = navSwiper.slides[activeIndex].offsetLeft //activeSlide距左边的距离
-//
-//			navSwiper.setTransition(tSpeed)
-//			if (navActiveSlideLeft < (clientWidth - parseInt(navSlideWidth)) / 2) {
-//				navSwiper.setTranslate(0)
-//			} else if (navActiveSlideLeft > navWidth - (parseInt(navSlideWidth) + clientWidth) / 2) {
-//				navSwiper.setTranslate(clientWidth - navWidth)
-//			} else {
-//				navSwiper.setTranslate((clientWidth - parseInt(navSlideWidth)) / 2 - navActiveSlideLeft)
-//			}
-//
-//		},
-//	}
-//});
 
   navSwiper.$el.on('touchstart', function(e) {
   	e.preventDefault() //去掉按压阴影
   })
-   navSwiper.on('tap', function(e) {
+  navSwiper.on('tap', function(e) {
 
   	clickIndex = this.clickedIndex
   	clickSlide = this.slides.eq(clickIndex)
-  	//pageSwiper.slideTo(clickIndex, 0);
+ 
   	this.slides.find('span').css('color', 'rgba(51,51,51,1)');
-  	clickSlide.find('span').css('color', 'rgba(255,72,145,1)');
+  	clickSlide.find('span').css('color', '#0BBE06');
+  	
+  	// 输出tab对应的值
+  	console.log(clickSlide.attr('data-selectval'))
+  	
+  	// 后台ajax
+  	
   })
 
-	
-	console.log(clientHeight)
-//	 var swiper = new Swiper('.swiper-container',{
-//              slidesPerView: 7,
-//              spaceBetween: 0,
-//              //centeredSlides: true,
-//              pagination: {
-//                  el: '.swiper-pagination',
-//                  clickable: true,
-//              },
-//          });
 	
 	
 	
