@@ -6,13 +6,79 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
   <title>地图搜索</title>
   <link rel="stylesheet" href="static/css/common.css">
+  <link rel="stylesheet" type="text/css" href="static/css/swiper-4.3.3.min.css"/>
   <link rel="stylesheet" href="static/css/app.css">
   <style type="text/css">
+  	body {
+  		position: relative;
+  	}
   	.select-wrap {
   		height: 3.333333rem;
+  		padding: 0 0.833333rem;
+  		overflow: hidden;
   	}
-  	#map {
+  	.select-wrap-inner {
+  		/*display: flex;*/
+  	}
+  	.select-item {
+  		font-size: 1.25rem;
+  		line-height:3.333333rem;
+  		color:#999;
+  		float: left;
+  		text-align: center;
+      background: #fff;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      margin-right: 1rem;
+  	}
+  	/*.swiper-container {
+      width: 100%;
+      height: 100%;
+    }*/
+    /*.select-item {
+      text-align: center;
+      background: #fff;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+    }*/
+    
+  	/*#map {
   		height: 41.666666rem;
+  	}*/
+  	
+  	.search-result {
+  		width: 29.5rem;
+  		position: absolute;
+  		bottom: 1rem;
+  		margin: 0 auto;
+  	}
+  	.search-result li {
+  		width: 29.5rem;
+  		height:7.333333rem;
+  		background: #fff;
+  		border-radius: 0.416666rem;
+  		border:1px solid #e5e5e5;
+  		margin-bottom: 1rem;
   	}
   </style>
 </head>
@@ -27,24 +93,73 @@
 		</div>
 	</div>
 	
-	<div class="select-wrap">
-		<a href="javascript:;" data-selectval='0'>全部</a>
-		<a href="javascript:;" data-selectval='1'>必看景点</a>
-		<a href="javascript:;" data-selectval='2'>康养医疗</a>
-		<a href="javascript:;" data-selectval='3'>酒店民宿</a>
-		<a href="javascript:;" data-selectval='4'>农业采摘</a>
-		<a href="javascript:;" data-selectval='5'>政府服务</a>
-		<a href="javascript:;" data-selectval='6'>统战馆</a>
-	</div>
+	<div class="select-wrap" >
+    <div class="select-wrap-inner">
+      <div  class="select-item" data-selectval='0'>全部</div >
+			<div  class="select-item" data-selectval='1'>必看景点</div >
+			<div  class="select-item" data-selectval='2'>康养医疗</div >
+			<div  class="select-item" data-selectval='3'>酒店民宿</div >
+			<div  class="select-item" data-selectval='4'>农业采摘</div >
+			<div  class="select-item" data-selectval='5'>政府服务</div >
+			<div  class="select-item" data-selectval='6'>统战馆</div >
+    </div>  
+  </div>
+        
+        
 	
 	<div id="map"></div>
 	
-	
+	<div class="search-result">
+		<ul>
+			<li>
+				<div class="left">
+					<h3>鸿运酒店</h3>
+					<p>1.7公里|重庆市武隆区赵家乡113号</p>
+					<p>营业时间：9:00-17:00</p>
+					<p>房间优惠：9.8折</p>
+				</div>
+				<div class="right">
+					
+				</div>
+			</li>
+			<li>
+				<div class="left">
+					<h3>鸿运酒店</h3>
+					<p>1.7公里|重庆市武隆区赵家乡113号</p>
+					<p>营业时间：9:00-17:00</p>
+					<p>房间优惠：9.8折</p>
+				</div>
+				<div class="right">
+					
+				</div>
+			</li>
+		</ul>
+	</div>
 	
 <script src="static/js/jquery-3.1.1.min.js"></script>
 <script src="static/js/common.js"></script>
+<script src="static/js/swiper-4.3.3.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=wqB7npvF7DsDGlFG2oYhih93K5iEqsou"></script>
 <script type="text/javascript">
+	// 地图高度
+	var clientHeight = window.screen.height;
+	$('#map').css('height',clientHeight-168 + 'px');
+	
+	
+	
+	console.log(clientHeight)
+//	 var swiper = new Swiper('.swiper-container',{
+//              slidesPerView: 7,
+//              spaceBetween: 0,
+//              //centeredSlides: true,
+//              pagination: {
+//                  el: '.swiper-pagination',
+//                  clickable: true,
+//              },
+//          });
+	
+	
+	
 // 地图初始化
 var map = new BMap.Map("map"); // 创建Map实例
 var point = new BMap.Point(107.562695,29.271674);//赵家乡政府
@@ -65,9 +180,13 @@ var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_R
 map.addControl(top_right_navigation);    
 
 // 设置点的新图标
-var myIcon = new BMap.Icon("static/mapicon/zhengfu1.png", new BMap.Size(50,50));
+var myIcon = new BMap.Icon("static/mapicon/icon_zzf.png", new BMap.Size(100,100));
 var marker2 = new BMap.Marker(point,{icon:myIcon});  // 创建标注
 map.addOverlay(marker2); 
+
+var iconArr = [
+	{type:'all',icon:'static/mapicon/icon_jiudian.png'}
+];
 
 // 添加多个点
 function addMarker(point){
@@ -76,7 +195,7 @@ function addMarker(point){
 	}
 
 	// 随机向地图添加25个标注
-	var jingquIcon = new BMap.Icon("static/mapicon/jingqu.png", new BMap.Size(50,50));
+	var jingquIcon = new BMap.Icon("static/mapicon/icon_jiudian.png", new BMap.Size(50,50));
 	var bounds = map.getBounds();
 	var sw = bounds.getSouthWest();
 	var ne = bounds.getNorthEast();
