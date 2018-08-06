@@ -1,79 +1,6 @@
-/*必看景区 scenic.html
- -------------------------------*/
-.scenic-item-info {
-	padding: 1rem 1.5rem;
-	/*background: red;*/
+body{
+	background: #f0f0f0;
 }
-.scenic-item-intro {
-	color:#999;
-	
-}
-.scenic-item-status {
-	display: inline-block;
-	width: 4rem;
-	height: 1.5rem;
-	line-height: 1.5rem;
-	background: #FFF6EB;
-	color: #FF6A30;
-	font-size: 1rem;
-	text-align: center;
-	border-radius: .5rem;
-}
-/*休整状态*/
-.off {
-	color: #999;
-	background: #f4f4f4;
-}
-.scenic-item-name {
-	font-size: 1.25rem;
-	font-weight: bold;
-	color:#333;
-	padding-left: 1rem;
-}
-
-.scenic-item-content {
-	color: #999;
-	/*padding: .3rem 0;*/
-	font-size: 1.166666rem;
-	line-height: 2rem;
-}
-.scenic-item-footer {
-	height: 3.75rem;
-	line-height: 3.75rem;
-	border-top: 1px solid #f4f4f4;
-	border-bottom: 1px solid #f4f4f4;
-	position: relative;
-}
-.scenic-item-footer a{
-	display: block;
-	width: 50%;
-	float:left;
-	text-align: center;
-	color: #22C41E;
-	font-size: 1rem;
-	font-weight: bold;
-}
-.scenic-item-footer .line {
-	display: block;
-	width: 1px;
-	height: 2.5rem;
-	background: #f4f4f4;
-	position: absolute;
-	left: 50%;
-	top: 0.583333rem;
-	z-index: 10;
-}
-.scenic-item-footer a img {
-	display:inline-block;
-	margin-right: .6rem;
-	width: 1.416666rem;
-	height: 1.416666rem;
-	vertical-align: middle;
-}
-
-
-/*赵家民宿 minsu.html
- ------------------------------------*/
 /*顶部搜索*/
 .top-search {
 	height: 4.666666rem;
@@ -114,85 +41,88 @@
 	top:1.8rem;
 }
 
-/*筛选条件*/
-.filter {
-	position: relative;
-	/*overflow: hidden;*/
+.intro {
+	background: #fff;
+	margin-bottom: 8px;
 }
-.filter-btn {
-	/*width: 100%;*/
-	height: 3.333333rem;
-	/*background: #00FFFF;*/
-	padding: 0 1rem;
-	position: relative;
-	z-index: 55;
+
+.content {
+	padding: 1rem;
+	font-size: 1.083333rem;
+	line-height: 1.875rem;
+	color: #666;
 }
-.filter-btn li{
-	width: 25%;
+.intro-footer {
 	height: 3.333333rem;
 	line-height: 3.333333rem;
-/*	background: red;*/
-	float:left;
-	font-size: 1.083333rem;
-	color:#333;
-	/*font-weight: bold;*/
-	text-align: center;
+	padding: 0 1rem;
 }
-.filter-btn li span {
-	display: inline-block;
-	width: 4.5rem;
-	height: 3.333333rem;
-	text-align: center;
-	/*margin-right: .5rem;*/
-	overflow: hidden;
-	float:left;
+.intro-footer img {
+	margin-top: 1rem;
 }
-.filter-btn li em {
-	display: inline-block;
+.addr {
 	float: left;
-	width: 0.7rem;
-	height: 0.5rem;
-	margin-top: 1.458333rem;
-	margin-left: 5px;
-	background: url(../images/icon_arrow.png) no-repeat;
-	background-position: center center;
 }
-
-.filter-btn li.active {
-	color: #22C41E;
+.addr img {
+	width: 0.916666rem;
+	height: 1.333333rem;
 }
-.filter-btn li.active em{
-	display: inline-block;
-	width: 1.2rem;
-	height: 0.5rem;
-	background: url(../images/icon_up.png) no-repeat;
-}
-
-.filter-condition {
-	width: 100%;
-	position: absolute;
-	top:3.333333rem;
-	left:0;
-	z-index: 100;
-	background: #fff;
-}
-.filter-condition-item {
-	display: none;
-}
-.filter-condition-item li {
-	padding-left: 1.3rem;
-	height:3.583333rem;
-	line-height: 3.583333rem;
+.addr span {
+	margin-left: .5rem;
 	font-size: 1.083333rem;
-	border-bottom: 1px solid #f1f1f1;
-	color:#333;
+	color: #333;
+	font-weight: bold;
 }
-.filter-condition-item li.active {
-	border-left: .3rem solid #22C41E;
-	padding-left: 1rem;
-	color: #22C41E;
+.tel {
+	display: block;
+	float: right;
+}
+.tel img {
+	display: inline-block;
+	width: 1.25rem;
+	height: 1.25rem;
 }
 
+.footer-btn {
+	height: 4.166666rem;
+	line-height: 4.166666rem;
+	font-size: 1.166666rem;
+	margin-top: 0.833333rem;
+	text-align: center;
+	color: #fff;
+}
+.footer-btn a {
+	display: block;
+	color: #fff;
+}
+.bg-red {
+	background: #F75652;
+}
+.bg-green {
+	background: #22C41E;
+}
+.footer-btn a .icon {
+	width: 1.166666rem;
+	height: 1.166666rem;
+	vertical-align: middle;
+}
+
+.scenic-item-info {
+	background: #fff;
+	
+}
+.scenic-item-intro {
+	border-bottom: 1px solid #f4f4f4;
+	padding: 1rem;
+}
+.scenic-item-status {
+	font-size: 1.25rem;
+	font-weight: bold;
+	color: #000;
+}
+.scenic-item-content {
+	padding: 1rem;
+}
 
 .isyiniao {
 	color:#0BBE06;
@@ -222,122 +152,7 @@
 	color:#FF6854;
 }
 
-/*遮罩*/
-.mask {
-	width: 100%;
-	height: 100vh;
-	position: absolute;
-	background: rgba(0,0,0,.5);
-	z-index: 20;
-	left:0;
-	top: 8rem;
-	bottom:0;
-	display: none;
-}
-
-/*康养赵家 climate.html
- ------------------------------------*/
-.climate-page {
-	width: 100%;
-	/*height: 100%;*/
-	background: url(../images/climate_bg.png) no-repeat;
-	background-position: center;
-    background-size: 100% 100%;
-   	height: 100vh;
-    margin: 0px;
-    padding: 0px;
-    overflow: hidden;
-}
-
-.climate-content {
-	width: 90%;
-	height: 34rem;
-	color:#fff;
-	background: rgba(0,0,0,.3);
-	border-radius: 0.5rem;
-	margin: 5rem auto;
-	padding: 0;
-}
-
-.climate-list {
-	padding: 0 1rem;
-}
-.climate-list li{
-	clear: both;
-	height: 5rem;
-	line-height:  5rem;
-	border-bottom: 1px solid rgba(255,255,255,.2);
-}
-.climate-list li:first-child {
-	height: 3rem;
-	line-height: 3rem;
-	border-bottom: 1px solid #fff;
-}
-.climate-list li:last-child {
-	border-bottom: none;
-}
-
-.climate-title {
-	font-size: 1.583333rem;
-}
-.climate-list li .img-box{
-	width: 3rem;
-	height: 3rem;
-	display: inline-block;
-	float: left;
-	margin-top: 1rem;
-}
-
-.climate-list li img{	
-	display: block;
-	margin: 0 auto;
-	vertical-align: middle;
-}
-.climate-list li span {
-	float: left;
-	padding-left: .5rem;
-}
-.climate-list li .fr em {
-	font-size: 1rem;
-}
-.climate-list li:nth-child(3) img,
-.climate-list li:nth-child(4) img,
-.climate-list li:nth-child(5) img {
-	margin-top: .5rem;
-}
-
-.climate-footer {
-	text-align: center;
-	color:#fff;
-	font-size: 1.458333rem;
-}
-
-/*候鸟之家 houniao.html
- -------------------------*/
-.houniao-page {
-	width: 100%;
-	background: url(../images/houniao_bg.png) no-repeat;
-	background-size: 100%;
-    overflow: hidden;
-}
-.houniao-wrap {
-	padding-top: 13rem;
-	height: 16.25rem;
-}
-
-
-
-/*统战馆 tzg.html
- -------------------------*/
-.tzgwrap {
-	font-size: 0.75rem;
-	line-height: 2rem;
-	color: #666;
-	background: #fff;
-}
-
-/*康养医疗 yiliao.html
- ---------------------*/
+/*国医馆*/
 .yiliao-page {
 	background: #f0f0f0;
 }
@@ -389,7 +204,7 @@
 }
 .yuyue-date {
 	height: 6.666666rem;
-	/*background: #009CDA;*/
+	
 	
 }
 
@@ -518,196 +333,4 @@
 .doctor-item .action-off a {
 	background:#ccc ;
 	color:#fff;
-}
-
-
-/*预约挂号 yuyue.html
- -------------------------*/
-.yuyue-page {
-	background: #F2F8F8;
-}
-
-.yuyue-status img{
-	display: block;
-	width: 6.25rem;
-	height: 6.25rem;
-	margin: 1.416666rem auto;
-}
-.yuyue-status p {
-	text-align: center;
-	font-size: 1.416666rem;
-	color:#262626;
-}
-.yuyue-info li {
-	clear: both;
-	height: 3rem;
-	line-height: 3rem;
-	font-size: 1.416666rem;
-}
-.yuyue-info li span{
-	color: #666;
-	float: left;
-}
-.yuyue-info li em{
-	color: #262626;
-	float: right;
-}
-.yuyue-btn {
-	display: block;
-	width: 100%;
-	height: 3.75rem;
-	line-height: 3.75rem;
-	font-size: 1.25rem;
-	text-align: center;
-	color:#fff;
-	background:#22C41E ;
-	border-radius: 0.5rem;
-	margin: 1rem auto;
-}
-/*.yuyue-notice {
-	background: red;
-}*/
-.yuyue-notice img{
-	display: block;
-	width: 1.083333rem;
-	height:1.416666rem;
-	float: left;
-	padding: 0 .3rem;
-}
-.yuyue-notice span{
-	display: block;
-	width: 90%;
-	float: left;
-	/*line-height: 2.5rem;*/
-}
-
-.yuyue-btn:active,
-.yuyue-btn:focus {
-	color:#fff;
-}
-.goindex {
-	background: #fff;
-	border:1px solid #199116;
-	color:#22C41E;
-}
-
-
-
-
-
-
-
-
-
-/*我为你代言 daiyan.html
- -------------------------*/
-
-/*代言顶部*/
-.daiyan-header {
-	width: 100%;
-	height: 22.083333rem;
-	background: #fff;
-	position: relative;
-}
-.daiyan-header-top {
-	height: 12.125rem;
-	background: url(../images/daiyan_header_bg_top.png) no-repeat;
-	background-size:100% 100% ;
-}
-.daiyan-avatar {
-	width: 8.333333rem;
-	height:8.333333rem;
-	overflow: hidden;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin-top: -4.166666rem;
-	margin-left:-4.166666rem;
-}
-.daiyan-avatar img{
-	width: 8.333333rem;
-	height:8.333333rem;
-}
-.daiyan-user {
-	margin-top: 4rem;
-	text-align: center;
-}
-.daiyan-user img{
-	width: 1.583333rem;
-	height: 1.583333rem;
-	margin-top: .3rem;
-}
-.daiyan-user span{
-	padding-left: .2rem;
-	color:#000;
-	font-size: 1.5rem;
-	font-weight: bold;
-}
-.daiyan-slogan {
-	margin-top: 1.166666rem;
-	text-align: center;
-}
-.daiyan-slogan img {
-	height: 1.208333rem;
-}
-
-/*代言项目*/
-.daiyan-item-tab {
-	height: 3.75rem;
-}
-.daiyan-item-tab li {
-	float: left;
-	width: 25%;
-	height: 3.75rem;
-	line-height: 3.75rem;
-	text-align: center;
-	color:#1a1a1a;
-	font-size: 1.166666rem;
-	font-weight: bold;
-	background: #f5f5f5;
-	border-bottom: 2px solid #e6e6e6;
-}
-
-.daiyan-item-tab li.active {
-	background: #CDFCCC;
-	border-bottom-color: #47E443;
-} 
-
-.daiyan-item-content {
-	padding: 1rem;
-}
-.daiyan-item-cell {
-	display: none;
-}
-.show {
-	display: block;
-}
-.daiyan-item-cell a{
-	display: block;
-	width: 14.166666rem;
-	height: 9.166666rem;
-	overflow: hidden;
-	float: left;
-	margin-right: 0.916666rem;
-	margin-bottom: 0.916666rem;
-	position: relative;
-}
-.daiyan-item-cell a:nth-child(2n){
-	margin-right: 0;
-}
-.daiyan-item-cell a img{
-	width: 100%;
-	height: 100%;
-}
-.daiyan-item-cell a p{
-	width: 100%;
-	height:1.666666rem;
-	line-height: 1.666666rem;
-	background: rgba(0,0,0,.5);
-	font-size: 1rem;
-	color: #fff;
-	text-align: center;
-	position: absolute;
-	bottom:0;
-	z-index: 10;
 }
