@@ -13,7 +13,6 @@
   	body {
   		position: relative;
   		background: #fff;
-
   	}
 #nav {
 	height: 3.333333rem;
@@ -51,13 +50,13 @@
 	margin: 0 auto;
 }
 .search-result li {
-	width: 27.5rem;
-	height:5.333333rem;
+	width: 29.5rem;
+	height:6.25rem;
 	background: #fff;
 	border-radius: 0.416666rem;
 	border:1px solid #e5e5e5;
 	margin-bottom: 1rem;
-	padding: 1rem;
+	padding: 0.833333rem;
 }
 .search-result li .left {
 	float:left;
@@ -70,11 +69,26 @@
 }
 .search-result li .left p {
 	font-size: 1rem;
-	line-height: 1.5rem;
+	line-height: 1.8rem;
 	color: #999;
 }
 .search-result li .left p:last-child {
 	color:#22C41E;
+}
+.search-result .right {
+	width: 4.625rem;
+	height: 6.25rem;
+	float: right;
+	border-left:0.083333rem solid #E5E5E5;
+	position: relative;
+}
+.search-result .right img {
+	position: absolute;
+	top: 50%;
+	right:1rem;
+	margin-top: -0.708333rem;
+	width:1.208333rem;
+	height: 1.416666rem;
 }
   </style>
 </head>
@@ -89,10 +103,7 @@
 		</div>
 	</div>
 	
-
-
-        
-   <div class="swiper-container" id="nav">
+  <div class="swiper-container" id="nav">
     <div class="swiper-wrapper">
       <div class="swiper-slide" data-selectval='0'>
         <span style="color:#0BBE06;">全部展示</span>
@@ -121,8 +132,6 @@
       </div>-->
     </div>
   </div>
-        
-
 	
 	<div id="map"></div>
 	
@@ -136,7 +145,7 @@
 					<p>房间优惠：9.8折</p>
 				</div>
 				<div class="right">
-					
+					<img src="static/img/icon_go.png"/>
 				</div>
 			</li>
 			<li>
@@ -147,7 +156,7 @@
 					<p>房间优惠：9.8折</p>
 				</div>
 				<div class="right">
-					
+					<img src="static/img/icon_go.png"/>
 				</div>
 			</li>
 		</ul>
@@ -256,7 +265,12 @@ function addMarker(point){
 		addMarker(point);
 	}
 
-
+function showInfo(e){
+	alert(e.point.lng + ", " + e.point.lat);
+}
+map.addEventListener("click", showInfo);
+	
+	
 //var arr =[];
 //// 当前定位
 //var geolocation = new BMap.Geolocation();
