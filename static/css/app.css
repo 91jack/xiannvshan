@@ -6,7 +6,7 @@ body{
 	width:100%;
 	position: absolute;
 	bottom: 1rem;
-	display: none;
+	/*display: none;*/
 }
 .search-result ul {
 	width: 29.5rem;
