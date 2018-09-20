@@ -109,7 +109,7 @@
 	
 	<div id="map"></div>
 	
-	<div class="search-result">
+	<!--<div class="search-result">
 		<ul>
 			<li>
 				<div class="left">
@@ -134,7 +134,7 @@
 				</div>
 			</li>
 		</ul>
-	</div>
+	</div>-->
 	
 <script src="static/js/jquery-3.1.1.min.js"></script>
 <script src="static/js/common.js"></script>
@@ -142,6 +142,86 @@
 <script src="static/js/navbarscroll.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=wqB7npvF7DsDGlFG2oYhih93K5iEqsou"></script>
 <script type="text/javascript">
+// 地图高度
+var clientHeight = window.screen.height;
+$('#map').css('height',clientHeight-160 + 'px');
+	
+// 地图初始化
+var map = new BMap.Map("map"); // 创建Map实例
+var point = new BMap.Point(106.662101,29.501584);//赵家乡政府
+map.centerAndZoom(point, 17); // 初始化地图,设置中心点坐标和地图级别
+map.enableScrollWheelZoom(true); // 缩放地图
+
+
+// 添加带有定位的导航控件
+var navigationControl = new BMap.NavigationControl({
+		// 靠左上角位置
+		anchor: BMAP_ANCHOR_TOP_LEFT,
+		// LARGE类型
+		type: BMAP_NAVIGATION_CONTROL_LARGE,
+		// 启用显示定位
+    enableGeolocation: true
+});
+
+map.addControl(navigationControl);
+  
+// 添加定位控件
+var geolocationControl = new BMap.GeolocationControl();
+geolocationControl.addEventListener("locationSuccess", function(e){
+	
+		// 定位成功事件
+		var address = '';
+		address += e.addressComponent.province;
+		address += e.addressComponent.city;
+		address += e.addressComponent.district;
+		address += e.addressComponent.street;
+		address += e.addressComponent.streetNumber;
+		alert("当前定位地址为：" + address);
+		
+		
+		var geoc = new BMap.Geocoder();
+		geoc.getLocation(e.point, function(rs) {
+			console.log(e.point)
+			// 创建定位点图标
+			var positionIcon = new BMap.Icon("static/mapicon/icon_position.png", new BMap.Size(18,33));
+			var positionMarker = new BMap.Marker(e.point,{icon:positionIcon});  // 创建标注
+			positionMarker.addEventListener('click',attribute);
+			map.addOverlay(positionMarker); 
+			positionMarker.enableDragging();//可拖拽
+			
+			function attribute(){
+				var p = positionMarker.getPosition(); // 获取marker的位置
+				console.log(p);
+				console.log(p.lng,p.lat);
+				
+				geoc.getLocation(p,function(rs){
+					console.log(rs)
+					var addComp = rs.addressComponents;
+					var newaddress = '';
+					newaddress += addComp.street;
+					newaddress += addComp.streetNumber;
+					console.log(newaddress);
+				});
+			}
+
+		})
+});
+
+geolocationControl.addEventListener("locationError",function(e){
+// 定位失败事件
+    alert(e.message);
+});
+map.addControl(geolocationControl);
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
 	
 $('#demo05').navbarscroll({
 	defaultSelect:0,
@@ -149,7 +229,26 @@ $('#demo05').navbarscroll({
 	    console.log(obj.text())
 	    console.log(obj.attr('ac-id'))
 	    var ac_id = obj.attr('ac-id');
-	    getData(ac_id)
+	    
+	    var icon = ''; 
+	    if(ac_id == 1){
+	    	icon = new BMap.Icon("static/mapicon/icon_meishi1.png", new BMap.Size(34,40));
+	    }else if(ac_id == 2){
+	    	icon = new BMap.Icon("static/mapicon/icon_yiliao1.png", new BMap.Size(34,40));
+	    }else if(ac_id == 3){
+	    	icon = new BMap.Icon("static/mapicon/icon_minsu1.png", new BMap.Size(34,40));
+	    }else if(ac_id == 4){
+	    	icon = new BMap.Icon("static/mapicon/icon_chuxing1.png", new BMap.Size(34,40));
+	    }else if(ac_id == 5){
+	    	icon = new BMap.Icon("static/mapicon/icon_jingqu1.png", new BMap.Size(34,40));
+	    }else if(ac_id == 6){
+	    	icon = new BMap.Icon("static/mapicon/icon_nongye1.png", new BMap.Size(34,40));
+	    }else if(ac_id == 7){
+	    	icon = new BMap.Icon("static/mapicon/icon_fuwu1.png", new BMap.Size(34,40));
+	    }
+	    
+	    getData(ac_id,icon);
+	    
 	}
 });
 	
@@ -161,157 +260,28 @@ $('#demo05').navbarscroll({
 	
 	
 	
-	// 地图高度
-	var clientHeight = window.screen.height;
-	$('#map').css('height',clientHeight-160 + 'px');
 	
 	
-	
-	
-	
-// 地图初始化
-var map = new BMap.Map("map"); // 创建Map实例
-var point = new BMap.Point(107.562695,29.271674);//赵家乡政府
-map.centerAndZoom(point, 15); // 初始化地图,设置中心点坐标和地图级别
-
-map.enableScrollWheelZoom(true); // 缩放地图
-
-
-//获取两点距离，保留小数点后两位
-//var pointA = new BMap.Point(106.486654,29.490295);  // 创建点坐标A--大渡口区
-//var pointB = new BMap.Point(106.581515,29.615467);  // 创建点坐标B--江北区
-//alert('从大渡口区到江北区的距离是：'+(map.getDistance(pointA,pointB)).toFixed(2)+' 米。');  //获取两点距离,保留小数点后两位
-//var polyline = new BMap.Polyline([pointA,pointB], {strokeColor:"blue", strokeWeight:6, strokeOpacity:0.5});  //定义折线
-//map.addOverlay(polyline);     //添加折线到地图上
 
  
 
-// 设置点的新图标
-var myIcon = new BMap.Icon("static/mapicon/icon_zzf.png", new BMap.Size(100,100));
-var marker2 = new BMap.Marker(point,{icon:myIcon});  // 创建标注
-map.addOverlay(marker2); 
 
-var iconArr = [
-	{type:'all',icon:'static/mapicon/icon_jiudian.png'}
-];
 
-// 添加多个点
-function addMarker(point){
-	  var marker = new BMap.Marker(point,{icon:jingquIcon});
-	  map.addOverlay(marker);
-	}
 
-	// 随机向地图添加25个标注
-	var jingquIcon = new BMap.Icon("static/mapicon/icon_jiudian.png", new BMap.Size(50,50));
-	var bounds = map.getBounds();
-	var sw = bounds.getSouthWest();
-	var ne = bounds.getNorthEast();
-	var lngSpan = Math.abs(sw.lng - ne.lng);
-	var latSpan = Math.abs(ne.lat - sw.lat);
-	for (var i = 0; i < 25; i ++) {
-		var point = new BMap.Point(sw.lng + lngSpan * (Math.random() * 0.7), ne.lat - latSpan * (Math.random() * 0.7));
-		addMarker(point);
-	}
-
-function showInfo(e){
-	alert(e.point.lng + ", " + e.point.lat);
+// 添加标注函数
+function addMarker(point,icon){
+  var marker = new BMap.Marker(point,{icon:icon});
+  map.addOverlay(marker);
 }
-map.addEventListener("click", showInfo);
-	
-	
-//var arr =[];
-//// 当前定位
-//var geolocation = new BMap.Geolocation();
-//geolocation.getCurrentPosition(function(r) {
-//	if(this.getStatus() == BMAP_STATUS_SUCCESS) {
-//		var geoc = new BMap.Geocoder();
-//			geoc.getLocation(r.point, function(rs) {
-//				console.log(r.point)
-//				var addComp = rs.addressComponents;
-//				var address = addComp.city + addComp.district + addComp.street + addComp.streetNumber;
-//				console.log(address);
-//				
-//				localStorage.setItem('addr',address);
-//				localStorage.setItem('address_xy',JSON.stringify(r.point))
-//			})
-//		position(r);
-//		deletePoint();
-//	} else {
-//		alert('failed' + this.getStatus());
-//	}
-//});
-//
-//
-//function showInfo(e) {
-//	position(e);
-//	deletePoint();
-//}
-//map.addEventListener("click", showInfo);
-//
-//var geolocation = new BMap.Geolocation();
-//geolocation.getCurrentPosition(function(r) {
-//	if(this.getStatus() == BMAP_STATUS_SUCCESS) {
-//		var geoc = new BMap.Geocoder();
-//		geoc.getLocation(r.point, function(rs) {
-//			console.log(r.point)
-//			var addComp = rs.addressComponents;
-//			var address = addComp.city + addComp.district + addComp.street + addComp.streetNumber;
-//			console.log(address);
-//			$('.icon').click(function(e){
-//				var mk = new BMap.Marker(e.point);
-//				mk.point= new BMap.Point(r.point.lng, r.point.lat)
-//				arr.push(mk);
-//				map.addOverlay(mk);
-//				map.panTo(mk.point);
-//				// 逆地址解析
-//				var geoc = new BMap.Geocoder();
-//				geoc.getLocation(mk.point, function(rs) {
-//					var addComp = rs.addressComponents;
-//					var address = addComp.city + addComp.district + addComp.street + addComp.streetNumber;
-//					addr.innerHTML = address;
-//				})
-//				p = mk.point;
-//				console.log(p);
-//				deletePoint();
-//			})
-//		})
-//	} else {
-//		alert('failed' + this.getStatus());
-//	}
-//});
-//
-//function position(e) {
-//	var mk = new BMap.Marker(e.point);
-//	arr.push(mk);
-//	map.addOverlay(mk);
-//	map.panTo(e.point);
-//	// 逆地址解析
-//	var geoc = new BMap.Geocoder();
-//	geoc.getLocation(e.point, function(rs) {
-//		var addComp = rs.addressComponents;
-//		var address = addComp.city + addComp.district + addComp.street + addComp.streetNumber;
-//		//addr.innerHTML = address;
-//	})
-//	p = e.point;
-//	console.log(p);
-//	$('.BMap_geolocationIcon').on('click',function(){
-//		console.log(1111111111)
-//	})
-//	// 存json
-//	
-//	localStorage.setItem('address_xy',JSON.stringify(e.point))
-//}
-//function deletePoint(){
-//	var allOverlay = map.getOverlays();
-//	for (var i = 0; i < arr.length-1; i++){
-//		map.removeOverlay(allOverlay[i+1]);
-//		return false;
-//	}
-//}
-	
+
+
+
+
+
+
 	
 		// 获取数据
-	function getData(ac_id){
+	function getData(ac_id,icon){
 		$.ajax({
 				type: "get",
 				url: "http://gzpswx.xnshequ.com/lvyou_api/shoplist?jsoncallback=?",
@@ -320,7 +290,16 @@ map.addEventListener("click", showInfo);
 					ac_id:ac_id
 				},
 				success: function(res) {
-					console.log(res)
+					console.log(res.data)
+					for (var i = 0; i < res.data.length ; i ++) {
+						var lng = res.data[i].longitude;
+						var lat = res.data[i].latitude;
+						console.log(lng,lat);
+						var point = new BMap.Point(lng,lat);
+						
+					
+						addMarker(point,icon);
+					}
 				}
 			});
 	}
