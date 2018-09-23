@@ -10,8 +10,7 @@
   <link rel="stylesheet" type="text/css" href="static/css/map.css"/>
 </head>
 <body>
-	<div class="mask"></div>
-	<!--搜索-->
+	
 	<div class="top-search clearfix">
 		<div class="container">
 			<input type="text" placeholder="搜索感兴趣内容"/>
@@ -36,12 +35,11 @@
 	
 	<div id="map"></div>
 	
-	<!--<div class="banner-wrap">
+<!--<div class="banner-wrap">
 		<a href="">
 			<img src="static/images/banner1.png"/>
 		</a>
-		
-	</div>-->
+</div>-->
 	
 	<div class="search-result">
 		<ul>
@@ -80,11 +78,6 @@
 <script src="static/js/navbarscroll.js" type="text/javascript" charset="utf-8"></script>
 <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=3GEBZ-XK5K5-BNAIY-QMUTU-NIC55-EWFGW"></script>
 <script type="text/javascript">
-// 地图高度
-var clientHeight = window.screen.height;
-$('#map').css('height',clientHeight-160 + 'px');
-
-
 
   var center = new qq.maps.LatLng(39.916527,116.397128);
     var map = new qq.maps.Map(document.getElementById('map'),{
@@ -96,10 +89,11 @@ $('#map').css('height',clientHeight-160 + 'px');
         size = new qq.maps.Size(40, 48),
         origin = new qq.maps.Point(0, 0),
         icon = new qq.maps.MarkerImage('static/mapicon/icon_yiliao1.png', size, origin, anchor);
-    var marker = new qq.maps.Marker({
-        icon: icon,
-        map: map,
-        position:map.getCenter()});
+    		var marker = new qq.maps.Marker({
+	        icon: icon,
+	        map: map,
+	        position:map.getCenter()
+        });
 
 	
 $('#demo05').navbarscroll({

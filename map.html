@@ -37,27 +37,86 @@
 	
 	<div id="map"></div>
 	
-	<div class="banner-wrap">
+	<!--<div class="banner-wrap">
 		<a href="">
 			<img src="static/images/banner1.png"/>
 		</a>
 		
-	</div>
+	</div>-->
 	
 	<div class="search-result">
 		<ul>
-			<!--酒店类型-->
-			<li>
+			<!--特色美食-->
+			<!--<li class="minsu">
 				<div class="left">
-					<h3> <span>营业</span> 鸿运酒店</h3>
+					<h3> 
+						<span>营业</span>
+						<img src="static/mapicon/icon_dang.png" alt="" />
+						鸿运酒店
+					</h3>
+					
 					<p>1.7公里|重庆市武隆区赵家乡113号</p>
 					<p>营业时间：9:00-17:00</p>
 					<p>房间优惠：9.8折</p>
 				</div>
 				<div class="right">
-					<img src="static/img/icon_go.png"/>
+					<a href="">
+						<img src="static/img/icon_go.png"/>
+					</a>
 				</div>
-			</li>
+			</li>-->
+			
+			<!--酒店民俗-->
+			<!--<li class="minsu">
+				<div class="left">
+					<h3> 
+						<span>营业</span>
+						<img src="static/mapicon/icon_dang.png" alt="" />
+						鸿运酒店
+					</h3>
+					
+					<p>1.7公里|重庆市武隆区赵家乡113号</p>
+					<p>营业时间：9:00-17:00</p>
+					<p>
+						<span>餐位数：<em>225 人</em></span>
+						<span>人均消费：<em>￥45/人</em> </span>
+					</p>
+					<p>房间优惠：9.8折</p>
+				</div>
+				<div class="right">
+					<a href="">
+						<img src="static/img/icon_go.png"/>
+					</a>
+				</div>
+			</li>-->
+			
+			<!--出行路线-->
+			<!--<li class="minsu">
+				<div class="left">
+					<h3> 
+						<span>营业</span>
+						<img src="static/mapicon/icon_dang.png" alt="" />
+						鸿运酒店
+					</h3>
+					
+					<p>1.7公里|重庆市武隆区赵家乡113号</p>
+					<p>营业时间：9:00-17:00</p>
+					<p>
+						<span>餐位数：<em>225 人</em></span>
+						<span>人均消费：<em>￥45/人</em> </span>
+					</p>
+					<p>房间优惠：9.8折</p>
+				</div>
+				<div class="right">
+					<a href="">
+						<img src="static/img/icon_go.png"/>
+					</a>
+				</div>
+			</li>-->
+			
+			
+			
+			
 			
 			
 			<!--<li>
@@ -95,9 +154,9 @@ map.enableScrollWheelZoom(true); // 缩放地图
 // 添加带有定位的导航控件
 var navigationControl = new BMap.NavigationControl({
 		// 靠左上角位置
-		//anchor: BMAP_ANCHOR_TOP_LEFT,
+		anchor: BMAP_ANCHOR_TOP_LEFT,
 		// LARGE类型
-		//type: BMAP_NAVIGATION_CONTROL_LARGE,
+		type: BMAP_NAVIGATION_CONTROL_LARGE,
 		// 启用显示定位
     enableGeolocation: true
 });
@@ -186,18 +245,31 @@ $('#demo05').navbarscroll({
 	    	icon = new BMap.Icon("static/mapicon/icon_fuwu1.png", new BMap.Size(34,40));
 	    }
 	    
+	    map.clearOverlays();
+	    
 	    getData(ac_id,icon);
 	    
 	}
 });
 	
-
+var infoWindow = '';
 // 添加标注函数
-function addMarker(point,icon){
+function addMarker(point,icon,label){
   var marker = new BMap.Marker(point,{icon:icon});
   map.addOverlay(marker);
+  map.addOverlay(label);
+  marker.addEventListener('click',function(){
+  	console.log(this);
+  	
+  });
+  
 }
 
+//var opts = {
+//	width:250,
+//	hieght:80,
+//	offset:(50,100)
+//}
 	
 	// 获取数据
 	function getData(ac_id,icon){
@@ -210,17 +282,42 @@ function addMarker(point,icon){
 				},
 				success: function(res) {
 					console.log(res.data)
+					var str = '';
 					for (var i = 0; i < res.data.length ; i ++) {
 						// 地图标注
 						var lng = res.data[i].longitude;
 						var lat = res.data[i].latitude;
 						console.log(lng,lat);
 						var point = new BMap.Point(lng,lat);
-						addMarker(point,icon);
 						
+						addMarker(point,icon,res.data[i].name);
+						
+						map.centerAndZoom(new BMap.Point(104.570896,25.798353), 14); // 初始化地图,设置中心点坐标和地图级别
 						// 列表展示
-						
+						str += '<li class="minsu">'
+								+	'<div class="left">'
+								+		'<h3>'
+									+		'<span>营业</span>'
+										+'<img src="static/mapicon/icon_dang.png" alt="" />'
+											+res.data[i].name
+									+'	</h3>'
+										
+									+'	<p>1.7公里|重庆市武隆区赵家乡113号</p>'
+										+'<p>营业时间：9:00-17:00</p>'
+										
+										+'<p>房间优惠：9.8折</p>'
+									+'</div>'
+									+'<div class="right">'
+									+'	<a href="">'
+										+	'<img src="static/img/icon_go.png"/>'
+										+'</a>'
+									+'</div>'
+							+'	</li>'
 					}
+					
+					//$('.search-result ul').html(str);
+					
+					//infoWindow = new BMap.InfoWindow(str,opts)
 				}
 		});
 	}
