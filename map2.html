@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
   <title>地图搜索</title>
   <link rel="stylesheet" href="static/css/common.css">
-  <link rel="stylesheet" type="text/css" href="static/css/swiper-4.3.3.min.css"/>
   <link rel="stylesheet" href="static/css/app.css">
   <link rel="stylesheet" type="text/css" href="static/css/map.css"/>
 </head>
@@ -37,17 +36,17 @@
 	
 	<div id="map"></div>
 	
-	<div class="banner-wrap">
+	<!--<div class="banner-wrap">
 		<a href="">
 			<img src="static/images/banner1.png"/>
 		</a>
 		
-	</div>
+	</div>-->
 	
 	<div class="search-result">
 		<ul>
 			<!--酒店类型-->
-			<li>
+			<!--<li>
 				<div class="left">
 					<h3> <span>营业</span> 鸿运酒店</h3>
 					<p>1.7公里|重庆市武隆区赵家乡113号</p>
@@ -57,7 +56,7 @@
 				<div class="right">
 					<img src="static/img/icon_go.png"/>
 				</div>
-			</li>
+			</li>-->
 			
 			
 			<!--<li>
@@ -79,88 +78,29 @@
 <script src="static/js/common.js"></script>
 <script src="static/js/iscroll.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="static/js/navbarscroll.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=wqB7npvF7DsDGlFG2oYhih93K5iEqsou"></script>
+<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=3GEBZ-XK5K5-BNAIY-QMUTU-NIC55-EWFGW"></script>
 <script type="text/javascript">
 // 地图高度
 var clientHeight = window.screen.height;
 $('#map').css('height',clientHeight-160 + 'px');
-	
-// 地图初始化
-var map = new BMap.Map("map"); // 创建Map实例
-var point = new BMap.Point(106.662101,29.501584);//赵家乡政府
-map.centerAndZoom(point, 10); // 初始化地图,设置中心点坐标和地图级别
-map.enableScrollWheelZoom(true); // 缩放地图
 
 
-// 添加带有定位的导航控件
-var navigationControl = new BMap.NavigationControl({
-		// 靠左上角位置
-		//anchor: BMAP_ANCHOR_TOP_LEFT,
-		// LARGE类型
-		//type: BMAP_NAVIGATION_CONTROL_LARGE,
-		// 启用显示定位
-    enableGeolocation: true
-});
 
-map.addControl(navigationControl);
-  
-// 添加定位控件
-var geolocationControl = new BMap.GeolocationControl();
-geolocationControl.addEventListener("locationSuccess", function(e){
-	
-		// 定位成功事件
-		var address = '';
-		address += e.addressComponent.province;
-		address += e.addressComponent.city;
-		address += e.addressComponent.district;
-		address += e.addressComponent.street;
-		address += e.addressComponent.streetNumber;
-		alert("当前定位地址为：" + address);
-		
-		
-		var geoc = new BMap.Geocoder();
-		geoc.getLocation(e.point, function(rs) {
-			console.log(e.point)
-			// 创建定位点图标
-			var positionIcon = new BMap.Icon("static/mapicon/icon_position.png", new BMap.Size(18,33));
-			var positionMarker = new BMap.Marker(e.point,{icon:positionIcon});  // 创建标注
-			positionMarker.addEventListener('click',attribute);
-			map.addOverlay(positionMarker); 
-			positionMarker.enableDragging();//可拖拽
-			
-			function attribute(){
-				var p = positionMarker.getPosition(); // 获取marker的位置
-				console.log(p);
-				console.log(p.lng,p.lat);
-				
-				geoc.getLocation(p,function(rs){
-					console.log(rs)
-					var addComp = rs.addressComponents;
-					var newaddress = '';
-					newaddress += addComp.street;
-					newaddress += addComp.streetNumber;
-					console.log(newaddress);
-				});
-			}
+  var center = new qq.maps.LatLng(39.916527,116.397128);
+    var map = new qq.maps.Map(document.getElementById('map'),{
+        center: center,
+        zoom: 13
+    });
 
-		})
-});
+    var anchor = new qq.maps.Point(6, 6),
+        size = new qq.maps.Size(40, 48),
+        origin = new qq.maps.Point(0, 0),
+        icon = new qq.maps.MarkerImage('static/mapicon/icon_yiliao1.png', size, origin, anchor);
+    var marker = new qq.maps.Marker({
+        icon: icon,
+        map: map,
+        position:map.getCenter()});
 
-geolocationControl.addEventListener("locationError",function(e){
-// 定位失败事件
-    alert(e.message);
-});
-map.addControl(geolocationControl);
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
 	
 $('#demo05').navbarscroll({
 	defaultSelect:0,
@@ -170,33 +110,28 @@ $('#demo05').navbarscroll({
 	    var ac_id = obj.attr('ac-id');
 	    
 	    var icon = ''; 
-	    if(ac_id == 1){
-	    	icon = new BMap.Icon("static/mapicon/icon_meishi1.png", new BMap.Size(34,40));
-	    }else if(ac_id == 2){
-	    	icon = new BMap.Icon("static/mapicon/icon_yiliao1.png", new BMap.Size(40,48));
-	    }else if(ac_id == 3){
-	    	icon = new BMap.Icon("static/mapicon/icon_minsu1.png", new BMap.Size(34,40));
-	    }else if(ac_id == 4){
-	    	icon = new BMap.Icon("static/mapicon/icon_chuxing1.png", new BMap.Size(34,40));
-	    }else if(ac_id == 5){
-	    	icon = new BMap.Icon("static/mapicon/icon_jingqu1.png", new BMap.Size(34,40));
-	    }else if(ac_id == 6){
-	    	icon = new BMap.Icon("static/mapicon/icon_nongye1.png", new BMap.Size(34,40));
-	    }else if(ac_id == 7){
-	    	icon = new BMap.Icon("static/mapicon/icon_fuwu1.png", new BMap.Size(34,40));
-	    }
+//	    if(ac_id == 1){
+//	    	icon = new BMap.Icon("static/mapicon/icon_meishi1.png", new BMap.Size(34,40));
+//	    }else if(ac_id == 2){
+//	    	icon = new BMap.Icon("static/mapicon/icon_yiliao1.png", new BMap.Size(40,48));
+//	    }else if(ac_id == 3){
+//	    	icon = new BMap.Icon("static/mapicon/icon_minsu1.png", new BMap.Size(34,40));
+//	    }else if(ac_id == 4){
+//	    	icon = new BMap.Icon("static/mapicon/icon_chuxing1.png", new BMap.Size(34,40));
+//	    }else if(ac_id == 5){
+//	    	icon = new BMap.Icon("static/mapicon/icon_jingqu1.png", new BMap.Size(34,40));
+//	    }else if(ac_id == 6){
+//	    	icon = new BMap.Icon("static/mapicon/icon_nongye1.png", new BMap.Size(34,40));
+//	    }else if(ac_id == 7){
+//	    	icon = new BMap.Icon("static/mapicon/icon_fuwu1.png", new BMap.Size(34,40));
+//	    }
 	    
-	    getData(ac_id,icon);
+//	    getData(ac_id,icon);
 	    
 	}
 });
 	
 
-// 添加标注函数
-function addMarker(point,icon){
-  var marker = new BMap.Marker(point,{icon:icon});
-  map.addOverlay(marker);
-}
 
 	
 	// 获取数据
@@ -215,8 +150,8 @@ function addMarker(point,icon){
 						var lng = res.data[i].longitude;
 						var lat = res.data[i].latitude;
 						console.log(lng,lat);
-						var point = new BMap.Point(lng,lat);
-						addMarker(point,icon);
+//						var point = new BMap.Point(lng,lat);
+//						addMarker(point,icon);
 						
 						// 列表展示
 						
