@@ -119,8 +119,8 @@ html,body{
    .search-result li .left p span {
    		display: inline-block;
    	}
-   .search-result li .left p span:first-child {
-   		margin-right: 2rem;
+   .search-result li .left p span {
+   		margin-right: 1rem;
    	}
     .search-result li .left p span em{
 	   color:#FF6A30 ;
