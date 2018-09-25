@@ -17,7 +17,7 @@
 		<div class="container">
 			<input type="text" placeholder="搜索感兴趣内容"/>
 			<img src="static/images/icon_search.png"/>
-			<a href="javascript:;" onclick="searchFn()">搜索</a>
+			<a href="javascript:;" id="search">搜索</a>
 		</div>
 	</div>
 	
@@ -38,10 +38,9 @@
 	<div id="map"></div>
 	
 	<div class="banner-wrap">
-		<a href="">
+		//<a href="">
 			<img src="static/images/banner1.png"/>
-		</a>
-		
+	//	</a>
 	</div>
 	
 	<div class="search-result">
@@ -228,13 +227,13 @@ function mapinit(r){
 	
 	
 	
-	
+var ac_id = 1;	
 	
 $('#nav').navbarscroll({
 	defaultSelect:0,
 	endClickScroll:function(obj){
 	    console.log(obj.attr('ac-id'))
-	    var ac_id = obj.attr('ac-id');
+	    ac_id = obj.attr('ac-id');
 	    $('.search-result ul').html('');
 	    
 	    var icon = ''; 
@@ -254,29 +253,62 @@ $('#nav').navbarscroll({
 	    	icon = new BMap.Icon("static/mapicon/icon_fuwu1.png", new BMap.Size(34,40));
 	    }
 	    
-	    map.clearOverlays();
+	    $.ajax({
+				type: "get",
+				url: "http://gzpswx.xnshequ.com/lvyou_api/banner?jsoncallback=?",
+				dataType: "jsonp",
+				data:{
+					ac_id:ac_id,
+				},
+				success: function(res) {
+					$('.banner-wrap img').attr('src',res.data.banner)
+				}
+			});
+	    
 	    
 	    // 调用数据
 	   	getData(ac_id,function(data){
 	   		console.log(data);
-	   		for (var i = 0; i < data.length ; i ++) {
-						// 地图标注
-						var lng = data[i].longitude;
-						var lat = data[i].latitude;
-						var point = new BMap.Point(lng,lat);
-						
-						map.centerAndZoom(point, 15); 
-						
-						var label = data[i].name?data[i].name:data[i].hs_name || data[i].pics_name;
-						
-						addMarker(point,icon,label,data[i],ac_id);
-						
-						
-	   		}
+	   		map.clearOverlays();
+	   		
+	   		if(data !=null){
+		   		for (var i = 0; i < data.length ; i ++) {
+							// 地图标注
+							var lng = data[i].longitude;
+							var lat = data[i].latitude;
+							var point = new BMap.Point(lng,lat);
+							
+							map.centerAndZoom(point, 15); 
+							
+							var label = data[i].name?data[i].name:data[i].hs_name || data[i].pics_name;
+							
+							addMarker(point,icon,label,data[i],ac_id);
+		   		}
+	  		}
 	   	});
 	   
 	   // 搜索
-	   searchFn()
+	   $('#search').click(function(){
+	   	map.clearOverlays();
+	   	searchFn(ac_id,function(data){
+	  		console.log(data);
+	  		if(data !=null){
+		   		for (var i = 0; i < data.length ; i ++) {
+							// 地图标注
+							var lng = data[i].longitude;
+							var lat = data[i].latitude;
+							var point = new BMap.Point(lng,lat);
+							
+							map.centerAndZoom(point, 15); 
+							
+							var label = data[i].name?data[i].name:data[i].hs_name || data[i].pics_name;
+							
+							addMarker(point,icon,label,data[i],ac_id);
+		   		}
+	  		}
+	  	});
+	   })
+	  	
 	    
 	}
 });
@@ -319,7 +351,7 @@ function addMarker(point,icon,label,data,ac_id){
     }else if(ac_id == 4){
     	str = chuxingStr(distance,data);
     }else if(ac_id == 5){
-    	str = meishiStr(distance,data);
+    	str = fengjingStr(distance,data);
     }else if(ac_id == 6){
     	str = nongyeStr(distance,data);
     }else if(ac_id == 7){
@@ -374,7 +406,7 @@ function yiliaoStr(distance,data){
 		+'<a href="'+data.wx_url+'">'
 		+'<h3>'
 		
-		if(data.open_status == 1){
+		if(data.status == 1){
 			str+='<span>营业</span>'
 		}else{
 			str+='<span>停业</span>'
@@ -387,7 +419,7 @@ function yiliaoStr(distance,data){
 		str += data.hs_name
 		+'</h3>'
 		+'<p>'+distance+'公里  | '+data.address+'</p>'
-			+'<p>营业时间：'+data.yytime+'-'+data.jztime+'</p>'
+			+'<p>营业时间：'+data.hs_gztime+'-'+data.hs_xbtime+'</p>'
 		+'<p>房间优惠：9.8折</p>'
 		+'</a>'
 		+'</div>'
@@ -414,10 +446,10 @@ function minsuStr(distance,data){
 			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
 		}
 		
-		str += data.pics_name
+		str += data.name
 		+'</h3>'
 		+'<p>'+distance+'公里  | '+data.address+'</p>'
-			+'<p>营业时间：'+data.yytime+'-'+data.jztime+'</p>'
+			+'<p>营业时间：'+data.yytime+'-'+data.xbtime+'</p>'
 		+'<p>房间优惠：9.8折</p>'
 		+'</a>'
 		+'</div>'
@@ -446,13 +478,44 @@ function chuxingStr(distance,data){
 		str += data.pics_name
 		+'</h3>'
 		+'<p>'+distance+'公里  | '+data.address+'</p>'
-			+'<p>营业时间：'+data.yytime+'-'+data.jztime+'</p>'
+			+'<p>营业时间：'+data.yytime+'-'+data.xbtime+'</p>'
 		+'<p>房间优惠：9.8折</p>'
 		+'</a>'
 		+'</div>'
 
 	return str;
 }
+
+
+// 风景名胜字符串
+function fengjingStr(distance,data){
+	var str = '';
+	str += '<li>'
+		+'<div class="left">'
+		+'<a href="'+data.wx_url+'">'
+		+'<h3>'
+		
+		if(data.open_status == 1){
+			str+='<span>营业</span>'
+		}else{
+			str+='<span>停业</span>'
+		}
+		
+		if(data.dangyuansf == 1){
+			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
+		}
+		
+		str += data.name
+		+'</h3>'
+		+'<p>'+distance+'公里  | '+data.address+'</p>'
+			+'<p>营业时间：'+data.yytime+'-'+data.xbtime+'</p>'
+		+'<p>房间优惠：9.8折</p>'
+		+'</a>'
+		+'</div>'
+
+	return str;
+}
+
 // 农业基地字符串
 function nongyeStr(distance,data){
 	var str = '';
@@ -474,7 +537,7 @@ function nongyeStr(distance,data){
 		str += data.pics_name
 		+'</h3>'
 		+'<p>'+distance+'公里  | '+data.address+'</p>'
-		+'<p>营业时间：'+data.xbtime+'-'+data.yytime+'</p>'
+		+'<p>营业时间：'+data.yytime+'-'+data.xbtime+'</p>'
 		+'</a>'
 		+'</div>'
 		
@@ -526,18 +589,19 @@ function getData(ac_id,callback){
 	});
 }
 // 搜素关键字
-function searchFn(){
+function searchFn(ac_id,callback){
 	var key = $('input').val()
 	$.ajax({
 		type: "get",
 		url: "http://gzpswx.xnshequ.com/lvyou_api/shoplist?jsoncallback=?",
 		dataType: "jsonp",
 		data:{
-			name:key
+			name:key,
+			ac_id:ac_id,
 		},
 		success: function(res) {
 			console.log(res)
-			//callback(res);
+			callback(res.data);
 		}
 	});
 }
