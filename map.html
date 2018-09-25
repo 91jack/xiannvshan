@@ -21,7 +21,7 @@
 		</div>
 	</div>
 	
-	<div class="wrapper" id="demo05">
+	<div class="wrapper" id="nav">
     <div class="scroller">
         <ul class="clearfix">
             <li class="cur" ac-id="1"><a href="javascript:void(0)">特色美食</a></li>
@@ -37,12 +37,12 @@
 	
 	<div id="map"></div>
 	
-	<!--<div class="banner-wrap">
+	<div class="banner-wrap">
 		<a href="">
 			<img src="static/images/banner1.png"/>
 		</a>
 		
-	</div>-->
+	</div>
 	
 	<div class="search-result">
 		<ul>
@@ -147,8 +147,22 @@ $('#map').css('height',clientHeight-160 + 'px');
 // 地图初始化
 var map = new BMap.Map("map"); // 创建Map实例
 var point = new BMap.Point(106.662101,29.501584);//赵家乡政府
-map.centerAndZoom(point, 10); // 初始化地图,设置中心点坐标和地图级别
+map.centerAndZoom(point, 14); // 初始化地图,设置中心点坐标和地图级别
 map.enableScrollWheelZoom(true); // 缩放地图
+
+// 获取当前定位
+var curPoint = null;
+var geolocation = new BMap.Geolocation();
+geolocation.getCurrentPosition(function(r){
+	if(this.getStatus() == BMAP_STATUS_SUCCESS){
+		
+		curPoint = r.point;
+		mapinit(r);
+	}
+	else {
+		alert('failed'+this.getStatus());
+	}        
+},{enableHighAccuracy: true})
 
 
 // 添加带有定位的导航控件
@@ -165,44 +179,11 @@ map.addControl(navigationControl);
   
 // 添加定位控件
 var geolocationControl = new BMap.GeolocationControl();
-geolocationControl.addEventListener("locationSuccess", function(e){
-	
-		// 定位成功事件
-		var address = '';
-		address += e.addressComponent.province;
-		address += e.addressComponent.city;
-		address += e.addressComponent.district;
-		address += e.addressComponent.street;
-		address += e.addressComponent.streetNumber;
-		alert("当前定位地址为：" + address);
+geolocationControl.addEventListener("locationSuccess", function(r){
+	 	map.clearOverlays();
+	 	mapinit(r);
+		curPoint = r.point;
 		
-		
-		var geoc = new BMap.Geocoder();
-		geoc.getLocation(e.point, function(rs) {
-			console.log(e.point)
-			// 创建定位点图标
-			var positionIcon = new BMap.Icon("static/mapicon/icon_position.png", new BMap.Size(18,33));
-			var positionMarker = new BMap.Marker(e.point,{icon:positionIcon});  // 创建标注
-			positionMarker.addEventListener('click',attribute);
-			map.addOverlay(positionMarker); 
-			positionMarker.enableDragging();//可拖拽
-			
-			function attribute(){
-				var p = positionMarker.getPosition(); // 获取marker的位置
-				console.log(p);
-				console.log(p.lng,p.lat);
-				
-				geoc.getLocation(p,function(rs){
-					console.log(rs)
-					var addComp = rs.addressComponents;
-					var newaddress = '';
-					newaddress += addComp.street;
-					newaddress += addComp.streetNumber;
-					console.log(newaddress);
-				});
-			}
-
-		})
 });
 
 geolocationControl.addEventListener("locationError",function(e){
@@ -212,6 +193,35 @@ geolocationControl.addEventListener("locationError",function(e){
 map.addControl(geolocationControl);
 	
 
+function mapinit(r){
+	var positionIcon = new BMap.Icon("static/mapicon/icon_position.png", new BMap.Size(18,33));
+	var positionMarker = new BMap.Marker(r.point,{icon:positionIcon});
+	
+	positionMarker.addEventListener('click',attribute);
+	map.addOverlay(positionMarker); 
+	positionMarker.enableDragging();//可拖拽
+		
+	map.panTo(r.point);
+	
+	function attribute(){
+		var p = positionMarker.getPosition(); // 获取marker的位置
+		console.log(p);
+		console.log(p.lng,p.lat);
+		
+		map.centerAndZoom(new BMap.Point(p.lng,p.lat), 14); // 初始化地图,设置中心点坐标和地图级别
+		
+		var geoc = new BMap.Geocoder();
+		geoc.getLocation(p,function(rs){
+			console.log(rs)
+			var addComp = rs.addressComponents;
+			var newaddress = '';
+			newaddress += addComp.street;
+			newaddress += addComp.streetNumber;
+			
+			console.log(newaddress);
+		});
+	}
+}
 	
 	
 	
@@ -220,13 +230,12 @@ map.addControl(geolocationControl);
 	
 	
 	
-	
-$('#demo05').navbarscroll({
+$('#nav').navbarscroll({
 	defaultSelect:0,
 	endClickScroll:function(obj){
-	    console.log(obj.text())
 	    console.log(obj.attr('ac-id'))
 	    var ac_id = obj.attr('ac-id');
+	    $('.search-result ul').html('');
 	    
 	    var icon = ''; 
 	    if(ac_id == 1){
@@ -247,111 +256,291 @@ $('#demo05').navbarscroll({
 	    
 	    map.clearOverlays();
 	    
-	    getData(ac_id,icon);
+	    // 调用数据
+	   	getData(ac_id,function(data){
+	   		console.log(data);
+	   		for (var i = 0; i < data.length ; i ++) {
+						// 地图标注
+						var lng = data[i].longitude;
+						var lat = data[i].latitude;
+						var point = new BMap.Point(lng,lat);
+						
+						map.centerAndZoom(point, 15); 
+						
+						var label = data[i].name?data[i].name:data[i].hs_name || data[i].pics_name;
+						
+						addMarker(point,icon,label,data[i],ac_id);
+						
+						
+	   		}
+	   	});
+	   
+	   // 搜索
+	   searchFn()
 	    
 	}
 });
-	
-var infoWindow = '';
+
 // 添加标注函数
-function addMarker(point,icon,label){
+function addMarker(point,icon,label,data,ac_id){
   var marker = new BMap.Marker(point,{icon:icon});
+  
   map.addOverlay(marker);
-  map.addOverlay(label);
+	var opts = {
+	  position : point,    // 指定文本标注所在的地理位置
+	  offset   : new BMap.Size(15,-15)    //设置文本偏移量
+	}
+	
+	var label = new BMap.Label(label, opts);  // 创建文本标注对象
+	label.setStyle({
+		 color : "red",
+		 fontSize : "12px",
+		 height : "20px",
+		 lineHeight : "20px",
+		 fontFamily:"微软雅黑"
+	});
+  
+  marker.setLabel(label)
+    
   marker.addEventListener('click',function(){
-  	console.log(this);
+  	console.log(data)
+  	var curLabel = this.getLabel().content;
+  	
+  	var distance = ((map.getDistance(curPoint,point))/1000).toFixed(2);
+  	console.log(distance);
+  	
+  	str = '';
+ 		if(ac_id == 1){
+    	str = meishiStr(distance,data);
+    }else if(ac_id == 2){
+    	str = yiliaoStr(distance,data);
+    }else if(ac_id == 3){
+    	str = minsuStr(distance,data)
+    }else if(ac_id == 4){
+    	str = chuxingStr(distance,data);
+    }else if(ac_id == 5){
+    	str = meishiStr(distance,data);
+    }else if(ac_id == 6){
+    	str = nongyeStr(distance,data);
+    }else if(ac_id == 7){
+    	str = fuwuStr(distance,data);
+    }
+    
+  	str += '<div class="right">'
+				+'<a href="http://api.map.baidu.com/marker?location='+data.latitude+','+data.longitude+'&title='+data.name+'&content='+data.address+'&output=html">'
+				+'<img src="static/img/icon_go.png"/>'
+				+'</a>'
+				+'</div>'
+				+'</li>'
+  	$('.search-result ul').html(str);
   	
   });
-  
 }
 
-//var opts = {
-//	width:250,
-//	hieght:80,
-//	offset:(50,100)
-//}
+// 美食字符串
+function meishiStr(distance,data){
+	var str = '';
+	str += '<li>'
+		+'<div class="left">'
+		+'<a href="'+data.wx_url+'">'
+		+'<h3>'
+		
+		if(data.open_status == 1){
+			str+='<span>营业</span>'
+		}else{
+			str+='<span>停业</span>'
+		}
+		
+		if(data.dangyuansf == 1){
+			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
+		}
+		
+		str += data.name
+		+'</h3>'
+		+'<p>'+distance+'公里  | '+data.address+'</p>'
+			+'<p>营业时间：'+data.yytime+'-'+data.jztime+'</p>'
+		+'<p>房间优惠：9.8折</p>'
+		+'</a>'
+		+'</div>'
+
+	return str;
+}
+
+// 康养医疗字符串
+function yiliaoStr(distance,data){
+	var str = '';
+	str += '<li>'
+		+'<div class="left">'
+		+'<a href="'+data.wx_url+'">'
+		+'<h3>'
+		
+		if(data.open_status == 1){
+			str+='<span>营业</span>'
+		}else{
+			str+='<span>停业</span>'
+		}
+		
+		if(data.dangyuansf == 1){
+			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
+		}
+		
+		str += data.hs_name
+		+'</h3>'
+		+'<p>'+distance+'公里  | '+data.address+'</p>'
+			+'<p>营业时间：'+data.yytime+'-'+data.jztime+'</p>'
+		+'<p>房间优惠：9.8折</p>'
+		+'</a>'
+		+'</div>'
+
+	return str;
+}
+
+
+// 酒店民宿字符串
+function minsuStr(distance,data){
+	var str = '';
+	str += '<li>'
+		+'<div class="left">'
+		+'<a href="'+data.wx_url+'">'
+		+'<h3>'
+		
+		if(data.open_status == 1){
+			str+='<span>营业</span>'
+		}else{
+			str+='<span>停业</span>'
+		}
+		
+		if(data.dangyuansf == 1){
+			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
+		}
+		
+		str += data.pics_name
+		+'</h3>'
+		+'<p>'+distance+'公里  | '+data.address+'</p>'
+			+'<p>营业时间：'+data.yytime+'-'+data.jztime+'</p>'
+		+'<p>房间优惠：9.8折</p>'
+		+'</a>'
+		+'</div>'
+
+	return str;
+}
+
+// 出行规划字符串
+function chuxingStr(distance,data){
+	var str = '';
+	str += '<li>'
+		+'<div class="left">'
+		+'<a href="'+data.wx_url+'">'
+		+'<h3>'
+		
+		if(data.open_status == 1){
+			str+='<span>营业</span>'
+		}else{
+			str+='<span>停业</span>'
+		}
+		
+		if(data.dangyuansf == 1){
+			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
+		}
+		
+		str += data.pics_name
+		+'</h3>'
+		+'<p>'+distance+'公里  | '+data.address+'</p>'
+			+'<p>营业时间：'+data.yytime+'-'+data.jztime+'</p>'
+		+'<p>房间优惠：9.8折</p>'
+		+'</a>'
+		+'</div>'
+
+	return str;
+}
+// 农业基地字符串
+function nongyeStr(distance,data){
+	var str = '';
+	str += '<li>'
+		+'<div class="left">'
+		+'<a href="'+data.wx_url+'">'
+		+'<h3>'
+		
+		if(data.open_status == 1){
+			str+='<span>采摘月</span>'
+		}else{
+			str+='<span>生长中</span>'
+		}
+		
+		if(data.dangyuansf == 1){
+			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
+		}
+		
+		str += data.pics_name
+		+'</h3>'
+		+'<p>'+distance+'公里  | '+data.address+'</p>'
+		+'<p>营业时间：'+data.xbtime+'-'+data.yytime+'</p>'
+		+'</a>'
+		+'</div>'
+		
+	return str;
+}	
+
+
+// 公共服务字符串
+function fuwuStr(distance,data){
+	var str = '';
+	str += '<li>'
+		+'<div class="left">'
+		+'<a href="'+data.wx_url+'">'
+		+'<h3>'
+		
+		if(data.open_status == 1){
+			str+='<span>营业</span>'
+		}else{
+			str+='<span>停业</span>'
+		}
+		
+		if(data.dangyuansf == 1){
+			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
+		}
+		
+		str += data.pics_name
+		+'</h3>'
+		+'<p>'+distance+'公里  | '+data.address+'</p>'
+		+'<p>营业时间：'+data.xbtime+'-'+data.yytime+'</p>'
+		+'</a>'
+		+'</div>'
+		
+	return str;
+}	
 	
-	// 获取数据
-	function getData(ac_id,icon){
-		$.ajax({
-				type: "get",
-				url: "http://gzpswx.xnshequ.com/lvyou_api/shoplist?jsoncallback=?",
-				dataType: "jsonp",
-				data:{
-					ac_id:ac_id,
-				},
-				success: function(res) {
-					console.log(res.data)
-					var str = '';
-					for (var i = 0; i < res.data.length ; i ++) {
-						// 地图标注
-						var lng = res.data[i].longitude;
-						var lat = res.data[i].latitude;
-						console.log(lng,lat);
-						var point = new BMap.Point(lng,lat);
-						
-						addMarker(point,icon,res.data[i].name);
-						
-						map.centerAndZoom(new BMap.Point(104.570896,25.798353), 14); // 初始化地图,设置中心点坐标和地图级别
-						// 列表展示
-						str += '<li class="minsu">'
-								+	'<div class="left">'
-								+		'<h3>'
-									+		'<span>营业</span>'
-										+'<img src="static/mapicon/icon_dang.png" alt="" />'
-											+res.data[i].name
-									+'	</h3>'
-										
-									+'	<p>1.7公里|重庆市武隆区赵家乡113号</p>'
-										+'<p>营业时间：9:00-17:00</p>'
-										
-										+'<p>房间优惠：9.8折</p>'
-									+'</div>'
-									+'<div class="right">'
-									+'	<a href="">'
-										+	'<img src="static/img/icon_go.png"/>'
-										+'</a>'
-									+'</div>'
-							+'	</li>'
-					}
-					
-					//$('.search-result ul').html(str);
-					
-					//infoWindow = new BMap.InfoWindow(str,opts)
-				}
-		});
-	}
 	
-	
-	// 搜素关键字
-	function searchFn(){
-		var key = $('input').val()
-		$.ajax({
-				type: "get",
-				url: "http://gzpswx.xnshequ.com/lvyou_api/shoplist?jsoncallback=?",
-				dataType: "jsonp",
-				data:{
-					name:key
-				},
-				success: function(res) {
-					console.log(res.data)
-//					for (var i = 0; i < res.data.length ; i ++) {
-//						var lng = res.data[i].longitude;
-//						var lat = res.data[i].latitude;
-//						console.log(lng,lat);
-//						var point = new BMap.Point(lng,lat);
-//						
-//					
-//						addMarker(point,icon);
-//					}
-				}
-		});
-	}
-	
-	
-	
-	
-	
+// 获取数据函数
+function getData(ac_id,callback){
+	$.ajax({
+		type: "get",
+		url: "http://gzpswx.xnshequ.com/lvyou_api/shoplist?jsoncallback=?",
+		dataType: "jsonp",
+		data:{
+			ac_id:ac_id,
+		},
+		success: function(res) {
+			callback(res.data)
+		}
+	});
+}
+// 搜素关键字
+function searchFn(){
+	var key = $('input').val()
+	$.ajax({
+		type: "get",
+		url: "http://gzpswx.xnshequ.com/lvyou_api/shoplist?jsoncallback=?",
+		dataType: "jsonp",
+		data:{
+			name:key
+		},
+		success: function(res) {
+			console.log(res)
+			//callback(res);
+		}
+	});
+}
 </script>
 </body>
 </html>
