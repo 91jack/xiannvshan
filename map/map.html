@@ -10,34 +10,12 @@
 </head>
 <body>
 	<div class="mask"></div>
-	<!--搜索-->
-	<div class="top-search clearfix">
-		<div class="container">
-			<input type="text" placeholder="搜索感兴趣内容"/>
-			<img src="static/img/icon_search.png"/>
-			<a href="javascript:;" id="search">搜索</a>
-		</div>
-	</div>
-	
-	<div class="wrapper" id="nav">
-    <div class="scroller">
-        <ul class="clearfix">
-            <li class="cur" ac-id="1"><a href="javascript:void(0)">特色美食</a></li>
-            <li ac-id="2"><a href="javascript:void(0)">康养医疗</a></li>
-            <li ac-id="3"><a href="javascript:void(0)">酒店民宿</a></li>
-            <li ac-id="4"><a href="javascript:void(0)">出行规划</a></li>
-            <li ac-id="5"><a href="javascript:void(0)">风景名胜</a></li>
-            <li ac-id="6"><a href="javascript:void(0)">农业基地</a></li>
-            <li ac-id="7"><a href="javascript:void(0)">公共服务</a></li>
-        </ul>
-    </div>
-</div>
-	
+
 	<div id="map"></div>
 	
 	<div class="banner-wrap">
 		<a href="javascript:;">
-		<!--	<img src="static/images/banner1.png"/>-->
+			<img src="static/img/banner1.png"/>
 		</a>
 	</div>
 	
@@ -45,20 +23,14 @@
 		<ul></ul>
 	</div>
 	
-	<!--搜索无结果提示-->
-	<div class="dialog">
-		很抱歉，未找到结果，您可以换个词试试！
-	</div>
 	
 <script src="static/js/jquery-3.1.1.min.js"></script>
 <script src="static/js/common.js"></script>
-<script src="static/js/iscroll.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="static/js/navbarscroll.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=tFb0HEivfUI25rT62K8BEruNgGUdHkwZ"></script>
 <script type="text/javascript">
 // 地图高度
 var clientHeight = window.screen.height;
-$('#map').css('height',clientHeight-160 + 'px');
+$('#map').css('height',clientHeight+ 'px');
 	
 // 地图初始化
 var map = new BMap.Map("map"); // 创建Map实例
@@ -137,101 +109,29 @@ function mapinit(r){
 	
 	
 	
-	
-var ac_id = 1;	
-	
-$('#nav').navbarscroll({
-	defaultSelect:0,
-	endClickScroll:function(obj){
-	    ac_id = obj.attr('ac-id');
-	    $('.search-result ul').html('');
-	    
-	    var icon = ''; 
-	    if(ac_id == 1){
-	    	icon = new BMap.Icon("static/mapicon/icon_meishi1.png", new BMap.Size(34,40));
-	    }else if(ac_id == 2){
-	    	icon = new BMap.Icon("static/mapicon/icon_yiliao1.png", new BMap.Size(40,48));
-	    }else if(ac_id == 3){
-	    	icon = new BMap.Icon("static/mapicon/icon_minsu1.png", new BMap.Size(34,40));
-	    }else if(ac_id == 4){
-	    	icon = new BMap.Icon("static/mapicon/icon_chuxing1.png", new BMap.Size(34,40));
-	    }else if(ac_id == 5){
-	    	icon = new BMap.Icon("static/mapicon/icon_jingqu1.png", new BMap.Size(34,40));
-	    }else if(ac_id == 6){
-	    	icon = new BMap.Icon("static/mapicon/icon_nongye1.png", new BMap.Size(34,40));
-	    }else if(ac_id == 7){
-	    	icon = new BMap.Icon("static/mapicon/icon_fuwu1.png", new BMap.Size(34,40));
-	    }
-	    
-	    $.ajax({
-				type: "get",
-				url: "http://gzpswx.xnshequ.com/lvyou_api/banner?jsoncallback=?",
-				dataType: "jsonp",
-				data:{
-					ac_id:ac_id,
-				},
-				success: function(res) {
-					if(res.data.banner != ''){
-						var str = '<img src='+res.data.banner + '>';
-						$('.banner-wrap a').html(str);
-					}
-				}
-			});
-	    
-	    
-	    // 调用数据
-	   	getData(ac_id,function(data){
-	   		map.clearOverlays();
-	   		
-	   		if(data !=null){
-		   		for (var i = 0; i < data.length ; i ++) {
-							// 地图标注
-							var lng = data[i].longitude;
-							var lat = data[i].latitude;
-							var point = new BMap.Point(lng,lat);
-							
-							map.centerAndZoom(point, 15); 
-							
-							var label = data[i].name?data[i].name:data[i].hs_name || data[i].pics_name;
-							
-							addMarker(point,icon,label,data[i],ac_id);
-		   		}
-	  		}
-	   	});
+
+
+// 上面为地图配置 不要随便改
+
+// 添加政府坐标
+
+
+
+
+// 下面为数据接口  可改  如果不需要 请删除
+var icon = '';
+var label = '盘州亦资街道委员会';
+var data = {
+	wx_url:'http://www.baidu.com',
+	address:'贵州',
+	xbtime:'08:00',
+	yytime:'16:00'
+}
+addMarker(point,icon,label,data);
 	   
-	   // 搜索
-	   $('#search').click(function(){
-	   	map.clearOverlays();
-	   	searchFn(ac_id,function(data){
-	  		console.log(data);
-	  		if(data.length>0){
-		   		for (var i = 0; i < data.length ; i ++) {
-							// 地图标注
-							var lng = data[i].longitude;
-							var lat = data[i].latitude;
-							var point = new BMap.Point(lng,lat);
-							
-							map.centerAndZoom(point, 15); 
-							
-							var label = data[i].name?data[i].name:data[i].hs_name || data[i].pics_name;
-							
-							addMarker(point,icon,label,data[i],ac_id);
-		   		}
-	  		}else{
-	  			$('.dialog').show();
-	  			setTimeout(function(){
-	  				$('.dialog').hide();
-	  			},2000)
-	  		}
-	  	});
-	   })
-	  	
-	    
-	}
-});
 
 // 添加标注函数
-function addMarker(point,icon,label,data,ac_id){
+function addMarker(point,icon,label,data){
   var marker = new BMap.Marker(point,{icon:icon});
   
   map.addOverlay(marker);
@@ -257,332 +157,38 @@ function addMarker(point,icon,label,data,ac_id){
   	
   	var distance = ((map.getDistance(curPoint,point))/1000).toFixed(2);
   	
-  	
- 		if(ac_id == 1){
-    	str = meishiStr(distance,data);
-    }else if(ac_id == 2){
-    	str = yiliaoStr(distance,data);
-    }else if(ac_id == 3){
-    	str = minsuStr(distance,data)
-    }else if(ac_id == 4){
-    	str = chuxingStr(distance,data);
-    }else if(ac_id == 5){
-    	str = fengjingStr(distance,data);
-    }else if(ac_id == 6){
-    	str = nongyeStr(distance,data);
-    }else if(ac_id == 7){
-    	str = fuwuStr(distance,data);
-    }
-    
+		var str = '';
+		str += '<li>'
+		+'<div class="left">'
+		+'<a href="'+data.wx_url+'">'
+		+'<h3>'
+		
+		
+		
+		
+		str +='<img src="static/mapicon/icon_dang.png" alt="" />'
+		+'</h3>'
+		+'<p>'+data.address+'</p>'
+		+'<p>服务时间：'+data.xbtime+'-'+data.yytime+'</p>'
+		
+		str +='</a>'
+		+'</div>'
+		+'<div class="right">'
+		+'<a href="http://api.map.baidu.com/marker?location='+data.latitude+','+data.longitude+'&title='+data.pics_name+'&content='+data.address+'&output=html">'
+		+'<img src="static/img/icon_goright.png"/>'
+		+'</a>'
+		+'</div>'
+		+'</li>'
   	
   	$('.search-result ul').html(str);
   	
   });
 }
 
-// 美食字符串
-function meishiStr(distance,data){
-	var str = '';
-	str += '<li>'
-		+'<div class="left">'
-		+'<a href="'+data.wx_url+'">'
-		+'<h3>'
-		
-		if(data.open_status == 1){
-			str+='<span>营业</span>'
-		}else{
-			str+='<span>停业</span>'
-		}
-		
-		if(data.dangyuansf == 1){
-			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
-		}
-		
-		str +='<em>'+ data.name+'</em>'
-		+'</h3>'
-		+'<p>'+distance+'公里  | '+data.address+'</p>'
-		+'<p>营业时间：'+data.yytime+'-'+data.jztime+'</p>'
-		+'<p><span>餐位数：<em>'+data.eat_num+'人</em></span><span>人均消费：<em>￥'+data.price+'/人</em></span></p>'	
-			
-		if(data.remark_name != null){
-			str+='<p>'+data.remark_name+':'+data.remark_content+'</p>'
-		}
-		
-		str +='</a>'
-		+'</div>'
-		+'<div class="right">'
-		+'<a href="http://api.map.baidu.com/marker?location='+data.latitude+','+data.longitude+'&title='+data.name+'&content='+data.address+'&output=html">'
-		+'<img src="static/img/icon_goright.png"/>'
-		+'</a>'
-		+'</div>'
-		+'</li>'
-		
-	return str;
-}
-
-// 康养医疗字符串
-function yiliaoStr(distance,data){
-	var str = '';
-	str += '<li>'
-		+'<div class="left">'
-		+'<a href="'+data.wx_url+'">'
-		+'<h3>'
-		
-		if(data.status == 1){
-			str+='<span>营业</span>'
-		}else{
-			str+='<span>停业</span>'
-		}
-		
-		if(data.dangyuansf == 1){
-			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
-		}
-		
-		str += data.hs_name
-		+'</h3>'
-		+'<p>'+distance+'公里  | '+data.address+'</p>'
-		+'<p>营业时间：'+data.hs_gztime+'-'+data.hs_xbtime+'</p>'
-		
-		if(data.remark_name != null || ''){
-			str+='<p>'+data.remark_name+':'+data.remark_content+'</p>'
-		}
-		str +='</a>'
-		+'</div>'
-		+'<div class="right">'
-		+'<a href="http://api.map.baidu.com/marker?location='+data.latitude+','+data.longitude+'&title='+data.hs_name+'&content='+data.address+'&output=html">'
-		+'<img src="static/img/icon_goright.png"/>'
-		+'</a>'
-		+'</div>'
-		+'</li>'
-	return str;
-}
 
 
-// 酒店民宿字符串
-function minsuStr(distance,data){
-	var str = '';
-	str += '<li>'
-		+'<div class="left">'
-		+'<a href="'+data.wx_url+'">'
-		+'<h3>'
-		
-		if(data.open_status == 1){
-			str+='<span>营业</span>'
-		}else{
-			str+='<span>停业</span>'
-		}
-		
-		if(data.dangyuansf == 1){
-			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
-		}
-		
-		str += data.name
-		+'</h3>'
-		+'<p>'+distance+'公里  | '+data.address+'</p>'
-		+'<p>营业时间：'+data.yytime+'-'+data.xbtime+'</p>'
-		+'<p><span>客房数：<em>'+data.room_num+'人</em></span><span>床位数：<em>'+data.bed_num+'人</em></span><span>餐位：<em>'+data.eat_num+'人</em></span></p>'	
-			
-		if(data.remark_name != null){
-			str+='<p>'+data.remark_name+':'+data.remark_content+'</p>'
-		}
-		
-		str +='</a>'
-		+'</div>'
-		+'<div class="right">'
-		+'<a href="http://api.map.baidu.com/marker?location='+data.latitude+','+data.longitude+'&title='+data.name+'&content='+data.address+'&output=html">'
-		+'<img src="static/img/icon_goright.png"/>'
-		+'</a>'
-		+'</div>'
-		+'</li>'
-
-	return str;
-}
-
-// 出行规划字符串
-function chuxingStr(distance,data){
-	var str = '';
-	str += '<li>'
-		+'<div class="left">'
-		+'<a href="'+data.wx_url+'">'
-		+'<h3>'
-		
-		if(data.open_status == 1){
-			str+='<span>营业</span>'
-		}else{
-			str+='<span>停业</span>'
-		}
-		
-		if(data.dangyuansf == 1){
-			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
-		}
-		
-		str += data.pics_name
-		+'</h3>'
-		+'<p>'+distance+'公里  | '+data.address+'</p>'
-		+'<p>营业时间：'+data.yytime+'-'+data.xbtime+'</p>'
-		
-		if(data.remark_name != null){
-			str+='<p>'+data.remark_name+':'+data.remark_content+'</p>'
-		}
-		
-		str +='</a>'
-		+'</div>'
-		+'<div class="right">'
-		+'<a href="http://api.map.baidu.com/marker?location='+data.latitude+','+data.longitude+'&title='+data.pics_name+'&content='+data.address+'&output=html">'
-		+'<img src="static/img/icon_goright.png"/>'
-		+'</a>'
-		+'</div>'
-		+'</li>'
-
-	return str;
-}
 
 
-// 风景名胜字符串
-function fengjingStr(distance,data){
-	var str = '';
-	str += '<li>'
-		+'<div class="left">'
-		+'<a href="'+data.wx_url+'">'
-		+'<h3>'
-		
-		if(data.open_status == 1){
-			str+='<span>营业</span>'
-		}else{
-			str+='<span>停业</span>'
-		}
-		
-		if(data.dangyuansf == 1){
-			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
-		}
-		
-		str += data.name
-		+'</h3>'
-		+'<p>'+distance+'公里  | '+data.address+'</p>'
-		+'<p>营业时间：'+data.yytime+'-'+data.xbtime+'</p>'
-		
-		if(data.remark_name != null){
-			str+='<p>'+data.remark_name+':'+data.remark_content+'</p>'
-		}
-		
-		str +='</a>'
-		+'</div>'
-		+'<div class="right">'
-		+'<a href="http://api.map.baidu.com/marker?location='+data.latitude+','+data.longitude+'&title='+data.name+'&content='+data.address+'&output=html">'
-		+'<img src="static/img/icon_goright.png"/>'
-		+'</a>'
-		+'</div>'
-		+'</li>'
-
-	return str;
-}
-
-// 农业基地字符串
-function nongyeStr(distance,data){
-	var str = '';
-	str += '<li>'
-		+'<div class="left">'
-		+'<a href="'+data.wx_url+'">'
-		+'<h3>'
-		
-		if(data.open_status == 1){
-			str+='<span>采摘月</span>'
-		}else{
-			str+='<span>生长中</span>'
-		}
-		
-		if(data.dangyuansf == 1){
-			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
-		}
-		
-		str += data.pics_name
-		+'</h3>'
-		+'<p>'+distance+'公里  | '+data.address+'</p>'
-		+'<p>营业时间：'+data.yytime+'-'+data.xbtime+'</p>'
-		
-		if(data.remark_name != null){
-			str+='<p>'+data.remark_name+':'+data.remark_content+'</p>'
-		}
-		
-		str +='</a>'
-		+'</div>'
-		+'<div class="right">'
-		+'<a href="http://api.map.baidu.com/marker?location='+data.latitude+','+data.longitude+'&title='+data.pics_name+'&content='+data.address+'&output=html">'
-		+'<img src="static/img/icon_goright.png"/>'
-		+'</a>'
-		+'</div>'
-		+'</li>'
-		
-	return str;
-}	
-
-
-// 公共服务字符串
-function fuwuStr(distance,data){
-	var str = '';
-	str += '<li>'
-		+'<div class="left">'
-		+'<a href="'+data.wx_url+'">'
-		+'<h3>'
-		
-		if(data.open_status == 1){
-			str+='<span>营业</span>'
-		}else{
-			str+='<span>停业</span>'
-		}
-		
-		if(data.dangyuansf == 1){
-			str +='<img src="static/mapicon/icon_dang.png" alt="" />'
-		}
-		
-		str += data.pics_name
-		+'</h3>'
-		+'<p>'+distance+'公里  | '+data.address+'</p>'
-		+'<p>营业时间：'+data.xbtime+'-'+data.yytime+'</p>'
-		
-		str +='</a>'
-		+'</div>'
-		+'<div class="right">'
-		+'<a href="http://api.map.baidu.com/marker?location='+data.latitude+','+data.longitude+'&title='+data.pics_name+'&content='+data.address+'&output=html">'
-		+'<img src="static/img/icon_goright.png"/>'
-		+'</a>'
-		+'</div>'
-		+'</li>'
-		
-	return str;
-}	
-	
-	
-// 获取数据函数
-function getData(ac_id,callback){
-	$.ajax({
-		type: "get",
-		url: "http://gzpswx.xnshequ.com/lvyou_api/shoplist?jsoncallback=?",
-		dataType: "jsonp",
-		data:{
-			ac_id:ac_id,
-		},
-		success: function(res) {
-			callback(res.data)
-		}
-	});
-}
-// 搜素关键字
-function searchFn(ac_id,callback){
-	var key = $('input').val()
-	$.ajax({
-		type: "get",
-		url: "http://gzpswx.xnshequ.com/lvyou_api/shoplist?jsoncallback=?",
-		dataType: "jsonp",
-		data:{
-			name:key,
-			ac_id:ac_id,
-		},
-		success: function(res) {
-			callback(res.data);
-		}
-	});
-}
 </script>
 </body>
 </html>

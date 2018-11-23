@@ -9,13 +9,38 @@ html,body{
 .top-search {
 	height: 4.666666rem;
 	position: relative;
-	z-index: ;
+}
+.top-search .goback {
+	width: 4.166666rem;
+	float:left;
+}
+.top-search .goback a {
+	font-size:1rem;
+	line-height: 2.5rem;
+}
+.top-search .goback a img{
+	width:0.583333rem;
+	height:1.083333rem;
+	float:left;
+	margin-top: .8rem;
+	margin-right: 0.5rem;
+}
+.top-search .goback a span {
+	display: block;
+	float:left;
+	margin-left: 1rem;
+	
+}
+.search {
+	float:left;
+	position: relative;
 }
 .top-search input {
-	width: 25rem;
+	width: 20rem;
 	height:1.5rem;
 	line-height: 1.5rem;
 	padding: .5rem 0;
+	margin-right: 1rem;
 	background: #fafafa;
 	float:left;
 	text-indent: 2.5rem;
@@ -26,7 +51,7 @@ html,body{
 	color: #ccc;
 	font-size: 1.083333rem;
 }
-.top-search a {
+.top-search #search {
 	display: block;
 	float:right;
 	width: 3.75rem;
@@ -41,8 +66,8 @@ html,body{
 	width: 1.083333rem;
 	height: 1.083333rem;
 	position: absolute;
-	left: 2rem;
-	top:1.8rem;
+	left: 1rem;
+	top:0.8rem;
 }
    .search-result {
    	width: 100%;
